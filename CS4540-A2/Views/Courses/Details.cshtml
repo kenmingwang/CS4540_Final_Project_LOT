@@ -1,0 +1,209 @@
+﻿<!-- Name: Ken Wang
+     UID: u1193853 -->
+@model CS4540_A2.Models.Course
+@{
+    ViewData["Title"] = "Details";
+    Course course = ViewData["Course"] as Course;
+    Dictionary<int, LOSNote> map = ViewData["LOSNotes"] as Dictionary<int, LOSNote>;
+    var name = ViewData["Professor"] as string[];
+    var fullname = name[0] + ' ' + name[1];
+    var count = 0;
+    var isNull = @ViewData["Note"] == null;
+    var text = @ViewData["Note"];
+}
+<script src="~/js/DetailPage.js"></script>
+<script>
+// Initialization
+$(function () {
+    CKEDITOR.disableAutoInline = true;
+    // Check if there's note
+    if ('@isNull' === 'False') {
+        $('#LastUpdateTime').html('&nbsp;' + 'on  @ViewData["NoteTime"]');
+        $('#LastUpdateName').text('Last updated by : @ViewData["ProfessorFullName"]');
+    }
+    else {
+        if ('@ViewData["Role"]' == 'Chair') {
+            $('#Approval').addClass('badge-info')
+            $('#Approval').addClass('mt-6')
+            $('#Approval').html('Nothing to approve');
+            $('#ApproveNoteBtn').attr('disabled', true);
+        }
+    }
+
+    if ('@ViewData["Approval"]' === 'False') {
+
+        $('#Approval').addClass('badge-info')
+        $('#Approval').html('Pending Approval');
+    }
+    else {
+        if ('@isNull' === 'False') {
+            $('#ApproveNoteBtn').addClass('disabled');
+            $('#Approval').addClass('badge badge-success')
+            $('#ApproveNoteBtn').attr('disabled', true);
+            $('#Approval').html('Approved');
+        }
+    }
+
+    // Check the role of the current user
+    if ('@ViewData["Role"]' == 'Instructor') {
+
+        $('#SaveNoteBtn').removeClass('d-none');
+    }
+    else {
+        $('#ApproveNoteBtn').removeClass('d-none');
+        $('#editor1').attr('contenteditable', false);
+    }
+});
+</script>
+
+
+<div id="accordion">
+    <div class="card">
+        <button id="headingOne" class="card-header btn btn-lg " data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <span class="table-header-color">
+                @Html.DisplayFor(model => model.Dept) -
+                @Html.DisplayFor(model => model.Number) -
+                @Html.DisplayFor(model => model.Semester) -
+                @Html.DisplayFor(model => model.Year)
+            </span> <span class="badge badge-pill badge-warning">Incomplete</span>
+        </button>
+        <div class="mb-1 card">
+            <div class="card-body">
+                <h3 class="card-title text-center">
+                    @Html.DisplayFor(model => model.Name)
+
+                </h3>
+                <h5 class="card-title text-center">
+                    Professor: @name[0] @name[1]
+                </h5>
+                <p class="card-text">
+
+                    @Html.DisplayFor(model => model.Description)
+                </p>
+
+            </div>
+            <div class="card-footer">
+                <h4 class="card-title d-inline">Professor Note:</h4>
+                <span id="Approval" class="badge d-inline"></span>
+                <div id="editor1" class="border rounded p-2 mt-2" contenteditable="true" onclick="ChangeBG('@ViewData["Role"]' , '@isNull')">
+                    @if (ViewData["Note"] != null)
+                    {
+                        @Html.Raw(text.ToString().Substring(0, text.ToString().Length - 1))
+                    }
+                    else
+                    {
+                        <p class="text-muted"><i>The note for this class is currently empty, click to edit and edit note...</i></p>
+                    }
+                </div>
+                <button id="SaveNoteBtn" class="btn  mt-2 btn-primary d-none" onclick="AddNote('@fullname','@course.CId')">Save</button>
+                <button id="ApproveNoteBtn" class="btn  mt-2 btn-primary d-none" onclick="ApproveNote('@ViewData["NoteId"]')">Approve</button>
+
+                <p id="LastUpdateTime" class="d-inline float-right mt-4 text-muted">
+                </p>
+                <p id="LastUpdateName" class="d-inline float-right mt-4 text-muted">
+                </p>
+
+            </div>
+
+        </div>
+        <hr>
+        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <table class="table table-hover table-striped">
+                <colgroup>
+                    <col span="1" style="width: 30%;">
+                    <col span="1" style="width: 50%;">
+                    <col span="1" style="width: 20%;">
+                </colgroup>
+
+                <thead>
+                    <tr>
+                        <th scope="col">
+                            Learning Outcome
+                        </th>
+                        <th scope="col">
+                            Evaluation Metric
+                            <button class="btn btn-outline-dark btn-xs">Edit</button>
+                            <button id="showBtn" class="btn btn-outline-dark btn-xs" data-toggle="collapse" data-target="#demo1" onclick="ToggleDnone()">show comment</button>
+
+                        </th>
+                        <th scope="col">
+                            Examples
+                            <button class="btn btn-outline-dark btn-xs">Edit</button>
+                        </th>
+
+                    </tr>
+                </thead>
+                <!--Reference to  https://www.bootply.com/fdTMNTiLis -->
+                <tbody>
+
+                    @foreach (LearningOutcome LOS in course.LOS)
+                    {
+
+                        <tr>
+                            <td>
+                                @LOS.Name
+
+                            </td>
+                            <td>
+                                <a href="~/files/DummyAssgn.pdf" target="_blank">@LOS.Name Assignment @count </a>
+                            </td>
+                            <td>
+                                <a class="btn btn-info btn-xs " href="~/files/Dummy.html">Good</a>
+                                <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Average</a>
+                                <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Poor</a>
+                            </td>
+                        </tr>
+                        <tr>
+                        </tr>
+                        <tr>
+                            <td name="comment" colspan="1" class="d-none ">
+                                <p class="d-inline mt-2 ml-4 mb-0">LOS Comment: </p>
+
+                                <button id="SaveNoteBtn" class="btn btn-sm btn-primary save-btn ml-1 d-inline"
+                                        onclick="AddComment('editor@(count+2)', 'lastEditComment@(count+2)', '@LOS.LId', '@User.IsInRole("Instructor")', '@fullname')">
+                                    Save
+                                </button>
+                                @if (map.ContainsKey(LOS.LId))
+                                {
+                                    <p id="lastEditComment@(count+2)" class="mt-2 ml-4 mb-0">
+                                        Last Edit : @map[LOS.LId].PostDate
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p id="lastEditComment@(count+2)" class="mt-2 ml-4 mb-0">
+                                        Edit and save for initial comment
+                                    </p>
+                                }
+                            </td>
+                            <td name="comment" colspan="2" class="d-none">
+                                <div class="accordian-body collapse" id="demo1">
+                                    <div id="editor@(count+2)" class="border rounded p-2 mt-2" contenteditable="true">
+                                        @if (map.ContainsKey(LOS.LId))
+                                        {
+                                            @if (!map[LOS.LId].IsProfessorNote)
+                                            {
+                                                <script>
+                                                    $('#editor@(count + 2)').addClass('text-red');
+                                                </script>
+                                            }
+                                            @Html.Raw(map[LOS.LId].Text)
+                                        }
+
+                                    </div>
+
+                                </div>
+                            </td>
+
+
+                        </tr>
+
+                        count += 1;
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>

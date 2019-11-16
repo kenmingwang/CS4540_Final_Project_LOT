@@ -1,0 +1,79 @@
+﻿<!-- Name: Ken Wang
+     UID: u1193853 -->
+@{
+    @using Microsoft.AspNetCore.Identity;
+    ViewData["Title"] = "UserRoels";
+    var map = ViewData["UserRoleMap"] as Dictionary<string[], bool[]>;
+    var roles = ViewData["Roles"] as List<IdentityRole>;
+    var active = "";
+}
+
+<script src="~/js/UserRolePage.js"></script>
+
+<h1 class="display-4  pb-2">User Roles and Permission List</h1>
+
+<div class="container">
+    <div class="text-center">
+        <div class="table-responsive rounded">
+            <table class="table rounded table-striped table-bordered table-dark">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            User
+                        </th>
+                        <th class="text-center">
+                            Roles
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="rounded">
+                    @foreach (KeyValuePair<string[], bool[]> pair in map)
+                    {
+                        <tr>
+                            <td scope="row">@pair.Key[0] @pair.Key[1]</td>
+
+                            <td>
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+
+                                    @if (pair.Value[0])
+                                    {
+                                        active = "active";
+                                    }
+                                    else
+                                    {
+                                        active = "";
+                                    }
+                                    <label class="btn btn-secondary @(active)" onclick="doPost(this,'@pair.Key[0]','@pair.Key[1]', 'Admin')">
+                                        <input type="checkbox" checked autocomplete="off"> Admin
+                                    </label>
+                                    @if (pair.Value[1])
+                                    {
+                                        active = "active";
+                                    }
+                                    else
+                                    {
+                                        active = "";
+                                    }
+                                    <label class="btn btn-secondary @(active)" onclick="doPost(this,'@pair.Key[0]','@pair.Key[1]', 'DepartmentChair')">
+                                        <input type="checkbox" id="chair"> DepartmentChair
+                                    </label>
+                                    @if (pair.Value[2])
+                                    {
+                                        active = "active";
+                                    }
+                                    else
+                                    {
+                                        active = "";
+                                    }
+                                    <label class="btn btn-secondary @(active)" onclick="doPost(this,'@pair.Key[0]','@pair.Key[1]', 'Instructor')">
+                                        <input type="checkbox" checked autocomplete="off"> Instructor
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

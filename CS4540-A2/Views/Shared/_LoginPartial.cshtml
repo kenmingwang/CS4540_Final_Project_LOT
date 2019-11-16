@@ -1,0 +1,54 @@
+﻿<!-- Name: Ken Wang
+     UID: u1193853 -->
+@using Microsoft.AspNetCore.Identity
+@using CS4540_A2.Util
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<environment include="Development">
+    <link rel="stylesheet" href="~/css/style.css" />
+</environment>
+@{
+    var Role_Message = "";
+    var z = User.IsInRole("Instructor");
+    if (z)
+    {
+        Role_Message = " (Instructor) ";
+    }
+    var y = User.IsInRole("DepartmentChair");
+    if (y)
+    {
+        Role_Message = " (DepartmentChair) ";
+    }
+    var x = User.IsInRole("Admin");
+    if (x)
+    {
+        Role_Message = " (Admin) ";
+    }
+}
+
+<ul class="navbar-nav">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        var name = UserNameAndRolesUtil.UserNameToActualName(UserManager.GetUserName(User));
+
+
+        <li class="nav-item navbar-nav-login">
+            <a id="manage" class="nav-link text-white text-sm-right pt-2" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @Role_Message @name[0] @name[1]!</a>
+        </li>
+        <li class="nav-item navbar-nav-login">
+            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                <button id="logout" type="submit" class="nav-link btn btn-link text-white logout-p">Logout</button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item navbar-nav-login">
+            <a class="nav-link text-whitet" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        </li>
+        <li class="nav-item navbar-nav-login">
+            <a class="nav-link text-white" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+</ul>

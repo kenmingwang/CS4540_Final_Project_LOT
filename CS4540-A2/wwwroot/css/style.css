@@ -1,0 +1,220 @@
+body {
+    background-color: #F2F2F3;
+    position: relative;
+    height: 100%;
+    margin: 0;
+    min-height: 100%;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+
+.container {
+    display: block;
+    flex-direction: column;
+    min-height: 80vh;
+    position: relative;
+}
+
+/* Header style */
+
+.header {
+    background-color: #cc0000;
+    max-height: 180px;
+}
+
+.header-text {
+    font-size: 35px;
+    font-family: "Times New Roman", Times, serif;
+    color: white;
+    font-weight: bold;
+    position: relative;
+}
+
+.logo-left {
+    float: left;
+    width: 50%;
+    padding: 10px;
+}
+
+.wrapper {
+    width: 90%;
+    margin: 0 auto;
+    max-width: 1280px;
+    position: relative;
+}
+
+/* Navbar style */
+
+.wrapper-nav {
+    width: 90%;
+    margin: -5px auto;
+    max-width: 1250px;
+    position: relative;
+    padding: -20px;
+}
+
+.nav-left {
+    float: left;
+    width: 50%;
+}
+
+.nav-right {
+    float: right;
+    width: 50%;
+    text-align: right;
+}
+
+.navbar-nav {
+    padding: -10px;
+}
+
+.navbar-nav-login {
+    margin: -8px 2px;
+}
+
+
+
+/* Search Box Modified based on https://www.youtube.com/watch?v=v1PeTDrw6OY&t=41s */
+.search-box {
+    background: #79161d;
+    height: 30px;
+    width: 20%;
+    border-radius: 30px;
+    position: relative;
+    bottom: -30px;
+    right: 20px;
+    float: right;
+}
+
+.search-btn {
+    color: #e84118;
+    float: right;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #2f3640;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s;
+    text-decoration: none;
+}
+
+.search-txt {
+    border: none;
+    background: none;
+    outline: none;
+    float: left;
+    padding-left: 15px;
+    color: white;
+    font-size: 12px;
+    transition: 0.4s;
+    line-height: 30px;
+}
+
+.search-box:hover > .search-txt {
+    width: 80%;
+}
+
+.search-box:hover > .search-btn {
+    background: white;
+}
+
+
+/* https://stackoverflow.com/questions/33911049/btn-xs-no-longer-a-valid-option-in-bootstrap-4 */
+.btn-group-xs > .btn, .btn-xxs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .5;
+    border-radius: .2rem;
+}
+
+
+.btn-group-xs > .btn, .btn-xs {
+    padding: .25rem .4rem;
+    font-size: .875rem;
+    line-height: .8;
+    border-radius: .3rem;
+}
+
+.icon-logout {
+    font-size:smaller;
+}
+
+/* Main body style */
+#accordion {
+    margin-top: 20px;
+}
+.table-header-color {
+    color: #EE4B3E;
+}
+
+.badge {
+    font-weight:300;
+    color:white;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 50%;
+    bottom: 5px;
+    position: relative;
+}
+
+.card-header {
+    background-color: #F5EACD;
+}
+
+.btn-edit {
+    font-size:13px;
+    position:relative;
+    bottom:1px;
+}
+
+.display-4 {
+    font-size:40px;
+    margin-top:20px;
+    text-align:center;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 0%;
+}
+
+/*footer {
+    height: 75px;
+    flex-shrink: 0;
+    background-color: #134c7d;
+}
+    */
+
+
+.p {
+    font-family: Arial;
+    font-size: 15px;
+}
+
+.logout-p{
+    margin-top:-1px;
+}
+
+label {
+    cursor: pointer;
+}
+
+.td-width{
+    width:500px;
+}
+
+.save-btn{
+    min-width:100px !important;
+}
+
+.text-red{
+    color:orangered;
+}
+

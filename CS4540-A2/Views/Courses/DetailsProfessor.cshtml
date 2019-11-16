@@ -1,0 +1,74 @@
+﻿<!-- Name: Ken Wang
+     UID: u1193853 -->
+@using CS4540_A2.Util
+@{
+    ViewData["Title"] = "DetailsProfessor";
+    string pname = ViewData["Name"] as string;
+    var name = UserNameAndRolesUtil.UserNameToActualName(pname);
+    List<Course> Courses = ViewData["Courses"] as List<Course>;
+    var Ccount = 1;
+}
+
+<div>
+    <h1 class="display-4">Professor @name[0] @name[1]'s LOS Courses</h1>
+</div>
+
+<div id="accordion">
+    @foreach (Course c in Courses)
+    {
+        <div class="card">
+            <button id="heading@(Ccount)" + class="card-header btn btn-lg " data-toggle="collapse" data-target="#collapse@(Ccount)" aria-expanded="true" aria-controls="collapse@(Ccount)">
+                <span class="table-header-color">
+                    @Html.DisplayFor(modelItem => c.Dept) -
+                    @Html.DisplayFor(modelItem => c.Number) -
+                    @Html.DisplayFor(modelItem => c.Semester) -
+                    @Html.DisplayFor(modelItem => c.Year) -
+                    @Html.DisplayFor(modelItem => c.Name)
+                </span> <span class="badge badge-pill badge-warning">Incomplete</span>
+            </button>
+
+
+            <div id="collapse@(Ccount)" class="collapse show" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
+                <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.CId" target="_blank"
+                        class=" btn btn-secondary w-100" >
+                    Click to see Details of this course
+                </a>
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Learning Outcome</th>
+                            <th scope="col">
+                                Evaluation Metric
+                                <button class="btn btn btn-default bg-light btn-xs btn-edit">Edit</button>
+                            </th>
+                            <th scope="col">
+                                Examples
+                                <button class="btn btn btn-default bg-light btn-xs  btn-edit">Edit</button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        </tr>
+                        @foreach (LearningOutcome los in c.LOS)
+                        {
+                            <tr>
+                                <td>@los.Name</td>
+                                <td><a href="~/files/DummyAssgn.pdf" target="_blank">@los.Name Assignment</a></td>
+                                <td>
+                                    <a class="btn btn-info btn-xs " href="~/files/Dummy.html">Good</a>
+                                    <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Average</a>
+                                    <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Poor</a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        Ccount += 1;
+    }
+
+
+</div>

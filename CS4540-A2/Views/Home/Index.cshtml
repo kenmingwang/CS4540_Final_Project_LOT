@@ -1,0 +1,84 @@
+﻿<!-- Name: Ken Wang
+     UID: u1193853 -->
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h1 class="display-4  pb-2">Links to test</h1>
+
+    <div class="text-center">
+        <p>
+            Login as the required roles to check on the specific pages.
+        </p>
+        <div class="table-responsive rounded">
+            <table class="table rounded table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">
+                            Admin
+                        </th>
+                        <th class="text-center">
+                            DepartmentChair
+                        </th>
+                        <th class="text-center">
+                            Instructor (Use professor_mary@utah.edu )
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="rounded">
+                    <tr>
+                        <td>
+                            <a asp-controller="Admin" asp-action="UserRoles"> UserRoles </a>
+                        </td>
+
+                        <td>
+                            <a asp-controller="Courses" asp-action="Index"> Courses List </a>
+
+                        </td>
+
+                        <td>
+                            <a asp-controller="Courses" asp-action="Details" asp-route-cid="5">One Course </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a asp-controller="Admin" asp-action="CourseIndex"> CRUD Courses </a>
+                        </td>
+
+                        <td>
+                            <a asp-controller="Courses" asp-action="Details" asp-route-cid="1">Course with seeded note</a>
+                        </td>
+
+                        <td>
+                            <a asp-controller="Courses" asp-action="DetailsProfessor" asp-route-ProfessorUserName="mary_hall">Mary's course </a>
+                           
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a asp-controller="Admin" asp-action="LOSIndex"> CRUD LOS </a>
+                        </td>
+
+                        <td>
+                            <a asp-controller="Courses" asp-action="DetailsProfessor" asp-route-ProfessorUserName="jim_germain">Professor's course (Jim)</a>
+
+                        </td>
+
+                        <td>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <a asp-controller="Courses" asp-action="Details" asp-route-cid="2">Course with seeded note 2</a>
+
+                        </td>
+                        <td></td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+

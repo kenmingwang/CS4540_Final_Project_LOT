@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "_NavDropDownPartial";
+}
+
+@using Microsoft.AspNetCore.Identity
+@using CS4540_A2.Util
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+@{ var x = User.IsInRole("Admin"); var Role_Message = ""; if (x) { Role_Message = " (Admin) "; }}
+@{ var y = User.IsInRole("DepartmentChair"); if (y) { Role_Message = " (DepartmentChair) "; }}
+@{ var z = User.IsInRole("Instructor"); if (z) { Role_Message = " (Instructor) "; }}
+@{ var username = UserManager.GetUserName(User);}
+
+@if (SignInManager.IsSignedIn(User) && Role_Message == " (Instructor) ")
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @Role_Message.Substring(2, Role_Message.Length - 4)
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" asp-controller="Courses" asp-action="DetailsProfessor" asp-route-ProfessorUserName="@(username)">Your courses </a>
+
+        </div>
+    </li>
+}
+@if (SignInManager.IsSignedIn(User) && Role_Message == " (DepartmentChair) ")
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @Role_Message.Substring(2, Role_Message.Length - 4)
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" asp-controller="Courses" asp-action="Index"> Courses List </a>
+        </div>
+    </li>
+}
+@if (SignInManager.IsSignedIn(User) && Role_Message == " (Admin) ")
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            @Role_Message.Substring(2, Role_Message.Length - 4)
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" asp-controller="Admin" asp-action="UserRoles"> User Roles </a>
+            <a class="dropdown-item" asp-controller="Admin" asp-action="CourseIndex"> CRUD Courses </a>
+            <a class="dropdown-item" asp-controller="Admin" asp-action="LOSIndex"> CRUD LOS </a>
+        </div>
+    </li>
+}
+
+

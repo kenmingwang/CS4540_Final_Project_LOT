@@ -1,0 +1,126 @@
+﻿<!-- Name: Ken Wang
+     UID: u1193853 -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="author" content="Ken Wang">
+    <meta name="description" content="A LO system for CS 4540">
+    <meta name="charset" content="UTF-8">
+    <meta name="keywords" content="HTML,CSS">
+    <link rel="stylesheet" href="style.css">
+    <title>Learning Outcome System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CS4540_A2</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/style.css" />
+        <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+        </script>
+
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="~/css/style.css" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
+              crossorigin="anonymous"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
+
+    </environment>
+
+</head>
+<body>
+    <div class="header">
+        <header class="wrapper clearfix">
+            <div class="logo-left">
+                <a href="https://www.utah.edu/" target="_blank" style="text-decoration: none">
+                    <img src="~/images/Ulogo.png" width="60" height="60" class="d-inline-block align-bottom" alt="">
+                </a>
+                <span class="header-text">
+                    Learning Outcome System
+                </span>
+            </div>
+            <div class="nav-right-search">
+                <div class="search-box">
+                    <input class="search-txt" type="text" placeholder="Type to search" />
+                    <a class="search-btn" href="#">
+                        <i class="fas fa-search"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Search form -->
+        </header>
+    </div>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <div class="wrapper-nav clearfix">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse nav-left" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/Home">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <partial name="_NavDropDownPartial" />
+                </ul>
+            </div>
+            <div class="nav-right">
+                <span class="navbar-text">
+                    <partial name="_LoginPartial" />
+                </span>
+            </div>
+        </div>
+
+    </nav>
+
+    <div class="container">
+        <partial name="_CookieConsentPartial" />
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="bg-dark font-small text-white py-3">
+        <div class="center">
+            <a href="https://github.com/kenmingwang/CS4540" target="_blank">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+
+        <div class="footer-copyright text-center">
+            © University of Utah - CS4540 - Fall - Ken Wang
+        </div>
+
+    </footer>
+
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script src="https://kit.fontawesome.com/db17860b98.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+
+    </environment>
+    <environment exclude="Development">
+
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
+        </script>
+        <script src="https://kit.fontawesome.com/db17860b98.js"></script>
+    </environment>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

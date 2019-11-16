@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <RootNamespace>CS4540-A2</RootNamespace>
+    <AssemblyName>CS4540-A2</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Chair\**" />
+    <Content Remove="Views\Chair\**" />
+    <EmbeddedResource Remove="Views\Chair\**" />
+    <None Remove="Views\Chair\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190927181953_LOSSchema.cs" />
+    <Compile Remove="Migrations\20190927181953_LOSSchema.Designer.cs" />
+    <Compile Remove="Migrations\20191010232632_CourseNote.cs" />
+    <Compile Remove="Migrations\20191010232632_CourseNote.Designer.cs" />
+    <Compile Remove="Migrations\20191010233115_LOSContextMigration.cs" />
+    <Compile Remove="Migrations\20191010233115_LOSContextMigration.Designer.cs" />
+    <Compile Remove="Migrations\20191010234140_LOSContextMigration.cs" />
+    <Compile Remove="Migrations\20191010234140_LOSContextMigration.Designer.cs" />
+    <Compile Remove="Migrations\20191011060033_LOSContextMigration.cs" />
+    <Compile Remove="Migrations\20191011060033_LOSContextMigration.Designer.cs" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="SendGrid" Version="9.12.0" />
+  </ItemGroup>
+
+</Project>
