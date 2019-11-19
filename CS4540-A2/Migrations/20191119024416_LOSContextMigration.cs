@@ -72,6 +72,32 @@ namespace CS4540A2.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExamplesFile",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Content = table.Column<byte[]>(nullable: true),
+                    UntrustedName = table.Column<string>(nullable: true),
+                    Size = table.Column<long>(nullable: false),
+                    IsGood = table.Column<bool>(nullable: false),
+                    IsAverage = table.Column<bool>(nullable: false),
+                    IsBad = table.Column<bool>(nullable: false),
+                    UploadDT = table.Column<DateTime>(nullable: false),
+                    LearningOutcomeLId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExamplesFile", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExamplesFile_LOS_LearningOutcomeLId",
+                        column: x => x.LearningOutcomeLId,
+                        principalTable: "LOS",
+                        principalColumn: "LId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LOSNotes",
                 columns: table => new
                 {
@@ -93,10 +119,38 @@ namespace CS4540A2.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SyllabusFile",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Content = table.Column<byte[]>(nullable: true),
+                    UntrustedName = table.Column<string>(nullable: true),
+                    Size = table.Column<long>(nullable: false),
+                    UploadDT = table.Column<DateTime>(nullable: false),
+                    LearningOutcomeLId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SyllabusFile", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SyllabusFile_LOS_LearningOutcomeLId",
+                        column: x => x.LearningOutcomeLId,
+                        principalTable: "LOS",
+                        principalColumn: "LId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_CourseNotes_CourseCId",
                 table: "CourseNotes",
                 column: "CourseCId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExamplesFile_LearningOutcomeLId",
+                table: "ExamplesFile",
+                column: "LearningOutcomeLId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_LOS_CourseCId",
@@ -107,6 +161,11 @@ namespace CS4540A2.Migrations
                 name: "IX_LOSNotes_LearningOutcomeLId",
                 table: "LOSNotes",
                 column: "LearningOutcomeLId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SyllabusFile_LearningOutcomeLId",
+                table: "SyllabusFile",
+                column: "LearningOutcomeLId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -115,7 +174,13 @@ namespace CS4540A2.Migrations
                 name: "CourseNotes");
 
             migrationBuilder.DropTable(
+                name: "ExamplesFile");
+
+            migrationBuilder.DropTable(
                 name: "LOSNotes");
+
+            migrationBuilder.DropTable(
+                name: "SyllabusFile");
 
             migrationBuilder.DropTable(
                 name: "LOS");

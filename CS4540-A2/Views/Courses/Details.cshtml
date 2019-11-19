@@ -5,11 +5,13 @@
     ViewData["Title"] = "Details";
     Course course = ViewData["Course"] as Course;
     Dictionary<int, LOSNote> map = ViewData["LOSNotes"] as Dictionary<int, LOSNote>;
+    Dictionary<int, int> AssignmentMap = ViewData["AssignmentMap"] as Dictionary<int, int>;
     var name = ViewData["Professor"] as string[];
     var fullname = name[0] + ' ' + name[1];
     var count = 0;
     var isNull = @ViewData["Note"] == null;
     var text = @ViewData["Note"];
+    
 }
 <script src="~/js/DetailPage.js"></script>
 <script>
@@ -54,6 +56,8 @@ $(function () {
         $('#editor1').attr('contenteditable', false);
     }
 });
+
+
 </script>
 
 
@@ -122,13 +126,12 @@ $(function () {
                         </th>
                         <th scope="col">
                             Evaluation Metric
-                            <button class="btn btn-outline-dark btn-xs">Edit</button>
                             <button id="showBtn" class="btn btn-outline-dark btn-xs" data-toggle="collapse" data-target="#demo1" onclick="ToggleDnone()">show comment</button>
 
                         </th>
                         <th scope="col">
                             Examples
-                            <button class="btn btn-outline-dark btn-xs">Edit</button>
+
                         </th>
 
                     </tr>
@@ -145,7 +148,17 @@ $(function () {
 
                             </td>
                             <td>
-                                <a href="~/files/DummyAssgn.pdf" target="_blank">@LOS.Name Assignment @count </a>
+                                @if (AssignmentMap.ContainsKey(LOS.LId))
+                                {
+                                    <a  asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)" 
+                                       target="_blank">@LOS.Name Assignment @count</a>
+                                }
+                                else
+                                {
+                                    <a id="Ass@(LOS.LId)"class="isDisabled" asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                       target="_blank">@LOS.Name Assignment @count </a>
+                                }
+                                <button class="btn btn-outline-dark btn-xs" onclick="Upload('Assignment','@LOS.LId')">Edit</button>
                             </td>
                             <td>
                                 <a class="btn btn-info btn-xs " href="~/files/Dummy.html">Good</a>

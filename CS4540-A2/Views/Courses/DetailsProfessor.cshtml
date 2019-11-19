@@ -6,6 +6,8 @@
     string pname = ViewData["Name"] as string;
     var name = UserNameAndRolesUtil.UserNameToActualName(pname);
     List<Course> Courses = ViewData["Courses"] as List<Course>;
+    Dictionary<int, int> AssignmentMap = ViewData["AssignmentMap"] as Dictionary<int, int>;
+
     var Ccount = 1;
 }
 
@@ -30,7 +32,7 @@
 
             <div id="collapse@(Ccount)" class="collapse show" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
                 <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.CId" target="_blank"
-                        class=" btn btn-secondary w-100" >
+                   class=" btn btn-secondary w-100">
                     Click to see Details of this course
                 </a>
                 <table class="table table-hover table-striped">
@@ -39,22 +41,31 @@
                             <th scope="col">Learning Outcome</th>
                             <th scope="col">
                                 Evaluation Metric
-                                <button class="btn btn btn-default bg-light btn-xs btn-edit">Edit</button>
                             </th>
                             <th scope="col">
                                 Examples
-                                <button class="btn btn btn-default bg-light btn-xs  btn-edit">Edit</button>
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                         </tr>
-                        @foreach (LearningOutcome los in c.LOS)
+                        @foreach (LearningOutcome LOS in c.LOS)
                         {
                             <tr>
-                                <td>@los.Name</td>
-                                <td><a href="~/files/DummyAssgn.pdf" target="_blank">@los.Name Assignment</a></td>
+                                <td>@LOS.Name</td>
+                                <td>
+                                    @if (AssignmentMap.ContainsKey(LOS.LId))
+                                    {
+                                        <a asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                           target="_blank">@LOS.Name Assignment</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Ass@(LOS.LId)" class="isDisabled" asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                           target="_blank">@LOS.Name Assignment</a>
+                                    }
+                                </td>
                                 <td>
                                     <a class="btn btn-info btn-xs " href="~/files/Dummy.html">Good</a>
                                     <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Average</a>

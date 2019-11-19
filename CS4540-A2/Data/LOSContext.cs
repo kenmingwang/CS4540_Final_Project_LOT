@@ -18,6 +18,9 @@ namespace CS4540_A2.Data
 
         public DbSet<CourseNote> CourseNotes { get; set; }
         public DbSet<LOSNote> LOSNotes { get; set; }
+
+        public DbSet<AssignmentFile> SyllabusFile {get;set;}
+        public DbSet<ExamplesFile> ExamplesFile { get; set; }
     }
    
 }

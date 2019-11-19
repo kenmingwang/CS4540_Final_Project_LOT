@@ -19,6 +19,29 @@ namespace CS4540A2.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("CS4540_A2.Models.AssignmentFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("Content");
+
+                    b.Property<int>("LearningOutcomeLId");
+
+                    b.Property<long>("Size");
+
+                    b.Property<string>("UntrustedName");
+
+                    b.Property<DateTime>("UploadDT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LearningOutcomeLId");
+
+                    b.ToTable("SyllabusFile");
+                });
+
             modelBuilder.Entity("CS4540_A2.Models.Course", b =>
                 {
                     b.Property<int>("CId")
@@ -75,6 +98,35 @@ namespace CS4540A2.Migrations
                     b.ToTable("CourseNotes");
                 });
 
+            modelBuilder.Entity("CS4540_A2.Models.ExamplesFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("Content");
+
+                    b.Property<bool>("IsAverage");
+
+                    b.Property<bool>("IsBad");
+
+                    b.Property<bool>("IsGood");
+
+                    b.Property<int>("LearningOutcomeLId");
+
+                    b.Property<long>("Size");
+
+                    b.Property<string>("UntrustedName");
+
+                    b.Property<DateTime>("UploadDT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LearningOutcomeLId");
+
+                    b.ToTable("ExamplesFile");
+                });
+
             modelBuilder.Entity("CS4540_A2.Models.LOSNote", b =>
                 {
                     b.Property<int>("LNId")
@@ -118,11 +170,27 @@ namespace CS4540A2.Migrations
                     b.ToTable("LOS");
                 });
 
+            modelBuilder.Entity("CS4540_A2.Models.AssignmentFile", b =>
+                {
+                    b.HasOne("CS4540_A2.Models.LearningOutcome", "LO")
+                        .WithMany()
+                        .HasForeignKey("LearningOutcomeLId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("CS4540_A2.Models.CourseNote", b =>
                 {
                     b.HasOne("CS4540_A2.Models.Course", "Course")
                         .WithMany()
                         .HasForeignKey("CourseCId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("CS4540_A2.Models.ExamplesFile", b =>
+                {
+                    b.HasOne("CS4540_A2.Models.LearningOutcome", "LO")
+                        .WithMany()
+                        .HasForeignKey("LearningOutcomeLId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

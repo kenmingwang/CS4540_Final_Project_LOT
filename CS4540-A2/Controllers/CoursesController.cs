@@ -15,6 +15,11 @@ using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using CS4540_A2.Data;
 using CS4540_A2.Util;
+using Microsoft.Extensions.Configuration;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
+using System.Net.Mime;
+using System.Net;
 
 namespace CS4540_A2.Controllers
 {
@@ -23,12 +28,22 @@ namespace CS4540_A2.Controllers
     {
         private readonly LOSContext _context;
         private readonly UserManager<IdentityUser> _userManager;
-
-        public CoursesController(LOSContext context, UserManager<IdentityUser> userManager)
+        private readonly long _fileSizeLimit;
+        private readonly string[] _permittedExtensions = { ".pdf", ".zip", ".png" };
+        public CoursesController(LOSContext context, UserManager<IdentityUser> userManager,
+            IConfiguration config)
         {
             _context = context;
             _userManager = userManager;
+            _fileSizeLimit = config.GetValue<long>("FileSizeLimit");
         }
+
+
+        public BufferedSingleFileUploadDb FileUpload { get; set; }
+
+        public string Result { get; private set; }
+
+
         [Authorize(Roles = "Admin,DepartmentChair")]
         // GET: Courses
         public async Task<IActionResult> Index()
@@ -52,6 +67,26 @@ namespace CS4540_A2.Controllers
             // return View(await _context.Courses.ToListAsync());
         }
 
+        public async Task<IActionResult> OnGetDownloadDbAsync(int? id)
+        {
+            if (id == null)
+            {
+                return View();
+            }
+
+            
+            var requestFile = await _context.SyllabusFile.
+                SingleOrDefaultAsync(m => m.LearningOutcomeLId == id);
+
+            if (requestFile == null)
+            {
+                return View();
+            }
+
+            // Don't display the untrusted file name in the UI. HTML-encode the value.
+            return File(requestFile.Content, MediaTypeNames.Application.Octet, WebUtility.HtmlEncode(requestFile.UntrustedName));
+        }
+
         // GET: Courses/Details?cId=1
         public async Task<IActionResult> Details(int cId)
         {
@@ -69,17 +104,18 @@ namespace CS4540_A2.Controllers
             var courseNote = await _context.CourseNotes.Where(c => c.CourseCId == course.CId).
                 OrderByDescending(n => n.PostDate).ToListAsync();
 
-            var LOSNotes =  await _context.LOSNotes.OrderByDescending(o => o.PostDate).GroupBy(g => g.LearningOutcomeLId).Select(s => 
-            new { 
-                s.Key,
-                Note = s.First().LearningOutcomeLId,
-                Text = s.First().Text,
-                Date = s.First().PostDate,
-                s.First().IsProfessorNote
-            }).ToListAsync();
-            
+            var LOSNotes = await _context.LOSNotes.OrderByDescending(o => o.PostDate).GroupBy(g => g.LearningOutcomeLId).Select(s =>
+           new
+           {
+               s.Key,
+               Note = s.First().LearningOutcomeLId,
+               Text = s.First().Text,
+               Date = s.First().PostDate,
+               s.First().IsProfessorNote
+           }).ToListAsync();
+
             Dictionary<int, LOSNote> map = new Dictionary<int, LOSNote>();
-            foreach(var o in LOSNotes)
+            foreach (var o in LOSNotes)
             {
                 map.Add(o.Note, new LOSNote()
                 {
@@ -130,6 +166,13 @@ namespace CS4540_A2.Controllers
                 ViewData["Role"] = "Instructor";
             }
 
+            var assign = await _context.SyllabusFile.AsNoTracking().ToListAsync();
+            Dictionary<int, int> LOSFileIDMap = new Dictionary<int, int>();
+            foreach(var ass in assign)
+            {
+                LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
+            }
+            ViewData["AssignmentMap"] = LOSFileIDMap;
             return View(course);
         }
         /* 
@@ -177,9 +220,16 @@ namespace CS4540_A2.Controllers
                 c.LOS = LOS;
             }
 
+
             ViewData["Courses"] = courses;
             ViewData["Name"] = ProfessorUserName;
-
+            var assign = await _context.SyllabusFile.AsNoTracking().ToListAsync();
+            Dictionary<int, int> LOSFileIDMap = new Dictionary<int, int>();
+            foreach (var ass in assign)
+            {
+                LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
+            }
+            ViewData["AssignmentMap"] = LOSFileIDMap;
             return View(courses);
         }
         public async Task<IActionResult> onPostSubmitNoteAsync([FromBody] NoteData request)
@@ -252,6 +302,29 @@ namespace CS4540_A2.Controllers
             return StatusCode(200);
         }
 
+        public async Task<IActionResult> OnPostUploadAsync()
+        {
+            var file = Request.Form.Files[0];
+            var lid = Request.Form["Lid"];
+            var rate = Request.Form.Count > 2 ? Request.Form["Rate"] : new Microsoft.Extensions.Primitives.StringValues();
+
+            var content = await FileHelpers.ProcessFormFile(file, _permittedExtensions, _fileSizeLimit);
+
+            var f = new AssignmentFile
+            {
+                Content = content,
+                UntrustedName = file.FileName,
+                Size = file.Length,
+                LearningOutcomeLId = Int32.Parse(lid.ToString()),
+                UploadDT = DateTime.UtcNow
+            };
+
+            _context.SyllabusFile.Add(f);
+            await _context.SaveChangesAsync();
+
+            return StatusCode(200);
+        }
+
 
     }
     public class NoteData
@@ -260,5 +333,12 @@ namespace CS4540_A2.Controllers
         public DateTime PostDate { get; set; }
         public string ProfessorFullName { get; set; }
         public int FId { get; set; }
+    }
+
+    public class BufferedSingleFileUploadDb
+    {
+        [Required]
+        [Display(Name = "File")]
+        public IFormFile FormFile { get; set; }
     }
 }

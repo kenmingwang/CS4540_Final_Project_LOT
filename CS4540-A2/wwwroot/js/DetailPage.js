@@ -182,3 +182,38 @@ function AddComment(editor, commentTime, LId, isProfessor, fullname) {
     });
 }
 
+async function Upload(type, id,rate) {
+    const { value: file } = await Swal.fire({
+        title: 'Select File (pdf or zip)',
+        input: 'file',
+        inputAttributes: {
+            accept: 'application/pdf,application/zip',
+            'aria-label': 'Upload your profile picture'
+        }
+    })
+
+    if (file) {
+        console.log(file);
+        var fileData = new FormData();
+        fileData.append(file.name, file);
+        fileData.append("LId", id);
+        if (type == 'Example') {
+            fileData.append("Rate", rate);
+        }
+        $.ajax({
+            url: '/Courses/OnPostUploadAsync',
+            type: 'post',
+            processData: false,
+            contentType: false,
+            data: fileData,
+            success: function (response) {
+                Swal.fire(
+                    'Upload Success',
+                    'success'
+                );
+                $('#Ass' + id).removeClass("isDisabled");
+            }
+        });
+    }
+}
+
