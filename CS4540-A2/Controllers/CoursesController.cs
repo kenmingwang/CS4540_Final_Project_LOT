@@ -20,6 +20,8 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using System.Net.Mime;
 using System.Net;
+using System.Globalization;
+using System.Threading;
 
 namespace CS4540_A2.Controllers
 {
@@ -74,7 +76,7 @@ namespace CS4540_A2.Controllers
                 return View();
             }
 
-            
+
             var requestFile = await _context.SyllabusFile.
                 SingleOrDefaultAsync(m => m.LearningOutcomeLId == id);
 
@@ -168,7 +170,7 @@ namespace CS4540_A2.Controllers
 
             var assign = await _context.SyllabusFile.AsNoTracking().ToListAsync();
             Dictionary<int, int> LOSFileIDMap = new Dictionary<int, int>();
-            foreach(var ass in assign)
+            foreach (var ass in assign)
             {
                 LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
             }
@@ -234,7 +236,23 @@ namespace CS4540_A2.Controllers
         }
         public async Task<IActionResult> onPostSubmitNoteAsync([FromBody] NoteData request)
         {
+            int currentYear = DateTime.Now.Year;
+            int currentMonth = DateTime.Now.Month;
+            string currentSemester = "";
+            if (currentMonth == 08 || currentMonth == 09 || currentMonth == 10 || currentMonth == 11 || currentMonth == 12)
+            {
+                currentSemester = "FA";
+            }
+            else if (currentMonth == 01 || currentMonth == 02 || currentMonth == 03 || currentMonth == 04 || currentMonth == 05)
+            {
+                currentSemester = "SP";
+            }
             var course = _context.Courses.Where(c => c.CId == request.FId).FirstOrDefault();
+            if (course.Year != 2020 || course.Semester != currentSemester)
+            {
+                return StatusCode(403);
+            }
+
             if (course == null)
             {
                 return null;
@@ -259,12 +277,15 @@ namespace CS4540_A2.Controllers
                 return StatusCode(405);
             }
             return StatusCode(200);
+
         }
 
         public async Task<IActionResult> onPostApproveNoteAsync(int CNId)
         {
+
             var note = _context.CourseNotes.Where(c => c.CNId == CNId).FirstOrDefault();
             note.IsApproved = true;
+
 
             try
             {
@@ -281,6 +302,22 @@ namespace CS4540_A2.Controllers
 
         public async Task<IActionResult> onPostLOSNoteAsync([FromBody] NoteData request)
         {
+            int currentYear = DateTime.Now.Year;
+            int currentMonth = DateTime.Now.Month;
+            string currentSemester = "";
+            if (currentMonth == 08 || currentMonth == 09 || currentMonth == 10 || currentMonth == 11 || currentMonth == 12)
+            {
+                currentSemester = "FA";
+            }
+            else if (currentMonth == 01 || currentMonth == 02 || currentMonth == 03 || currentMonth == 04 || currentMonth == 05)
+            {
+                currentSemester = "SP";
+            }
+            var course = _context.Courses.Where(c => c.CId == request.FId).FirstOrDefault();
+            if (course.Year != 2020 || course.Semester != currentSemester)
+            {
+                return StatusCode(403);
+            }
             LOSNote note = new LOSNote()
             {
                 Text = request.Text,
@@ -304,6 +341,7 @@ namespace CS4540_A2.Controllers
 
         public async Task<IActionResult> OnPostUploadAsync()
         {
+
             var file = Request.Form.Files[0];
             var lid = Request.Form["Lid"];
             var rate = Request.Form.Count > 2 ? Request.Form["Rate"] : new Microsoft.Extensions.Primitives.StringValues();
@@ -325,8 +363,43 @@ namespace CS4540_A2.Controllers
             return StatusCode(200);
         }
 
+        public async Task<IActionResult> PastCourses(int course_name)
+        {
+            var courses = await _context.Courses
+               // .OrderBy(course => course.Number)
+                .Where(o => o.Number == course_name)
+                .ToListAsync();
 
+            // list of emails 
+            Dictionary<Course, string[]> map = new Dictionary<Course, string[]>();
+            foreach(Course c in courses)
+            {
+
+                var Professor = await _userManager.FindByEmailAsync(c.Email);
+                map.Add(c, UserNameAndRolesUtil.UserNameToActualName(Professor.UserName));
+            }
+
+            foreach (Course c in courses)
+            {
+                var LOS = await _context.LOS.Where(LO => LO.CourseCId == c.CId).ToListAsync();
+                c.LOS = LOS;
+                
+            }
+            //var courseEmail = courses;
+            //var professor = await _userManager.FindByEmailAsync(courseEmail);
+            ViewData["Courses"] = courses;
+            ViewData["Professor"] = map;
+            var assign = await _context.SyllabusFile.AsNoTracking().ToListAsync();
+            Dictionary<int, int> LOSFileIDMap = new Dictionary<int, int>();
+            foreach (var ass in assign)
+            {
+                LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
+            }
+            ViewData["AssignmentMap"] = LOSFileIDMap;
+            return View(courses);
+        }
     }
+
     public class NoteData
     {
         public string Text { get; set; }
