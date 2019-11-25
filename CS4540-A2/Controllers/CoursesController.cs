@@ -310,12 +310,24 @@ namespace CS4540_A2.Controllers
 
             var content = await FileHelpers.ProcessFormFile(file, _permittedExtensions, _fileSizeLimit);
 
+            if(content.Length == 0)
+            {
+                return StatusCode(405);
+            }
+
+            // Check if there's a file there already for this LOS, if so delete it before add.
+            var prevFile = _context.SyllabusFile.Where(m => m.LearningOutcomeLId == lid).FirstOrDefault();
+            if (prevFile != null)
+            {
+                _context.Remove(prevFile);  
+            }
+
             var f = new AssignmentFile
             {
                 Content = content,
                 UntrustedName = file.FileName,
                 Size = file.Length,
-                LearningOutcomeLId = Int32.Parse(lid.ToString()),
+                LearningOutcomeLId = int.Parse(lid.ToString()),
                 UploadDT = DateTime.UtcNow
             };
 
