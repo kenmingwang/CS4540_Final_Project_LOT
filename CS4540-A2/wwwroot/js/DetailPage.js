@@ -217,3 +217,43 @@ async function Upload(type, id,rate) {
     }
 }
 
+async function UploadExample(id) {
+    const { value: fruit } = await Swal.fire({
+        title: 'Select which example to upload',
+        html:
+              '<h3> Type </h3>'
+            + '<select id="selection" class="swal2-select" style="display: flex;">'
+            + '<option value="good">Good</option> '
+            + '<option value="average" >Average</option> ' 
+            + '<option value="poor">Poor</option> ' 
+            + '</select > '
+            + '<h3> File (pdf or zip) </h3>'
+            + '<input id="fileInput" type="file" accept="application/pdf,application/zip"'
+            + 'aria- label="Upload your file" class= "swal2-file" placeholder = "" style = "display: flex;" > ',
+        showCancelButton: true,
+        preConfirm: () => {
+            var file = document.getElementById('fileInput').files[0];
+            var fileData = new FormData();
+            fileData.append(file.name, file);
+            fileData.append("LId", id);
+            fileData.append("Rate", document.getElementById('selection').value);
+
+            $.ajax({
+                url: '/Courses/OnPostUploadExampleAsync',
+                type: 'post',
+                processData: false,
+                contentType: false,
+                data: fileData,
+                success: function (response) {
+                    Swal.fire(
+                        'Upload Success',
+                        'success'
+                    );
+                    $('#Example' + id).removeClass("isDisabled");
+                }
+            });
+        }
+    })
+
+}
+

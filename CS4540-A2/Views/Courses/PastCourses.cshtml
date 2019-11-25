@@ -1,0 +1,80 @@
+﻿
+@using CS4540_A2.Util
+@{
+    ViewData["Title"] = "PastCourses";
+    //string pname = ViewData["Name"] as string;
+
+    // var name = UserNameAndRolesUtil.UserNameToActualName(pname);
+    List<Course> Courses = ViewData["Courses"] as List<Course>;
+    Dictionary<int, int> AssignmentMap = ViewData["AssignmentMap"] as Dictionary<int, int>;
+    Dictionary<Course, string[]> professorName = ViewData["Professor"] as Dictionary<Course, string[]>;
+    var Ccount = 1;
+}
+
+<div id="accordion">
+    @foreach (Course c in Courses)
+    {
+        <div class="card">
+            <button id="heading@(Ccount)" + class="card-header btn btn-lg " data-toggle="collapse" data-target="#collapse@(Ccount)" aria-expanded="true" aria-controls="collapse@(Ccount)">
+                <span class="table-header-color">
+                    @Html.DisplayFor(modelItem => c.Dept) -
+                    @Html.DisplayFor(modelItem => c.Number) -
+                    @Html.DisplayFor(modelItem => c.Semester) -
+                    @Html.DisplayFor(modelItem => c.Year) -
+                    @Html.DisplayFor(modelItem => c.Name) -
+                    @Html.DisplayFor(modelItem => (professorName[c][0]))
+                    @Html.DisplayFor(modelItem => (professorName[c][1]))
+
+                </span> <span class="badge badge-pill badge-warning">Incomplete</span>
+            </button>
+
+
+            <div id="collapse@(Ccount)" class="collapse show" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Learning Outcome</th>
+                            <th scope="col">
+                                Evaluation Metric
+                            </th>
+                            <th scope="col">
+                                Examples
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        </tr>
+                        @foreach (LearningOutcome LOS in c.LOS)
+                        {
+                            <tr>
+                                <td>@LOS.Name</td>
+                                <td>
+                                    @if (AssignmentMap.ContainsKey(LOS.LId))
+                                    {
+                                        <a asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                           target="_blank">@LOS.Name Assignment</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Ass@(LOS.LId)" class="isDisabled" asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                           target="_blank">@LOS.Name Assignment</a>
+                                    }
+                                </td>
+                                <td>
+                                    <a class="btn btn-info btn-xs " href="~/files/Dummy.html">Good</a>
+                                    <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Average</a>
+                                    <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Poor</a>
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        Ccount += 1;
+    }
+
+
+</div>
