@@ -236,7 +236,8 @@ async function UploadExample(id) {
             var fileData = new FormData();
             fileData.append(file.name, file);
             fileData.append("LId", id);
-            fileData.append("Rate", document.getElementById('selection').value);
+            var selection = document.getElementById('selection').value;
+            fileData.append("Rate", selection);
 
             $.ajax({
                 url: '/Courses/OnPostUploadExampleAsync',
@@ -249,7 +250,8 @@ async function UploadExample(id) {
                         'Upload Success',
                         'success'
                     );
-                    $('#Example' + id).removeClass("isDisabled");
+                    console.log('#Ex' + selection + '_' + id);
+                    $('#Ex' + selection + '_' + id).removeClass("disabled");
                 }
             });
         }

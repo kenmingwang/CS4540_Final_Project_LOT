@@ -7,6 +7,7 @@
     var name = UserNameAndRolesUtil.UserNameToActualName(pname);
     List<Course> Courses = ViewData["Courses"] as List<Course>;
     Dictionary<int, int> AssignmentMap = ViewData["AssignmentMap"] as Dictionary<int, int>;
+    Dictionary<int, int[]> ExampleMap = ViewData["ExampleMap"] as Dictionary<int, int[]>;
 
     var Ccount = 1;
 }
@@ -67,9 +68,45 @@
                                     }
                                 </td>
                                 <td>
-                                    <a class="btn btn-info btn-xs " href="~/files/Dummy.html">Good</a>
-                                    <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Average</a>
-                                    <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Poor</a>
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][0] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                           target="_blank">Good</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Exgood_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                           target="_blank">Good</a>
+                                    }
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][1] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                           target="_blank">Average</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Exaverage_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                           target="_blank">Average</a>
+                                    }
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][2] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                           target="_blank">Poor</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Expoor_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                           target="_blank">Poor</a>
+                                    }
                                 </td>
                             </tr>
                         }

@@ -6,12 +6,12 @@
     Course course = ViewData["Course"] as Course;
     Dictionary<int, LOSNote> map = ViewData["LOSNotes"] as Dictionary<int, LOSNote>;
     Dictionary<int, int> AssignmentMap = ViewData["AssignmentMap"] as Dictionary<int, int>;
+    Dictionary<int, int[]> ExampleMap = ViewData["ExampleMap"] as Dictionary<int, int[]>;
     var name = ViewData["Professor"] as string[];
     var fullname = name[0] + ' ' + name[1];
     var count = 0;
     var isNull = @ViewData["Note"] == null;
     var text = @ViewData["Note"];
-    
 }
 <script src="~/js/DetailPage.js"></script>
 <script>
@@ -150,20 +150,57 @@ $(function () {
                             <td>
                                 @if (AssignmentMap.ContainsKey(LOS.LId))
                                 {
-                                    <a  asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)" 
+                                    <a asp-controller="Courses" asp-action="OnGetDownloadDbSyllabusAsync" asp-route-id="@(LOS.LId)"
                                        target="_blank">@LOS.Name Assignment @count</a>
                                 }
                                 else
                                 {
-                                    <a id="Ass@(LOS.LId)"class="isDisabled" asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                    <a id="Ass@(LOS.LId)" class="isDisabled" asp-controller="Courses"
+                                       asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
                                        target="_blank">@LOS.Name Assignment @count </a>
                                 }
                                 <button class="btn btn-outline-dark btn-xs" onclick="Upload('Assignment','@LOS.LId')">Edit</button>
                             </td>
                             <td>
-                                <a class="btn btn-info btn-xs " href="~/files/Dummy.html">Good</a>
-                                <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Average</a>
-                                <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Poor</a>
+                                @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][0] != -1)
+                                {
+                                    <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                       asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                       target="_blank">Good</a>
+                                }
+                                else
+                                {
+                                    <a id="Exgood_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                       asp-action="OnGetDownloadDbExampleAsync"
+                                       asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                       target="_blank">Good</a>
+                                }
+                                @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][1] != -1)
+                                {
+                                    <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                       asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                       target="_blank">Average</a>
+                                }
+                                else
+                                {
+                                    <a id="Exaverage_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                       asp-action="OnGetDownloadDbExampleAsync"
+                                       asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                       target="_blank">Average</a>
+                                }
+                                @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][2] != -1)
+                                {
+                                    <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                       asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                       target="_blank">Poor</a>
+                                }
+                                else
+                                {
+                                    <a id="Expoor_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                       asp-action="OnGetDownloadDbExampleAsync"
+                                       asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                       target="_blank">Poor</a>
+                                }
                                 <button class="btn btn-outline-dark btn-xs" onclick="UploadExample('@LOS.LId')">Edit</button>
 
                             </td>
