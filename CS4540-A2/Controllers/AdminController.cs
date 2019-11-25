@@ -18,7 +18,7 @@ namespace CS4540_A2.Controllers
     {
         private readonly LOSContext _context;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;     
 
         public AdminController(LOSContext context, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {

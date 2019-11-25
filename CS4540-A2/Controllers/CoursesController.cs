@@ -363,6 +363,38 @@ namespace CS4540_A2.Controllers
             return StatusCode(200);
         }
 
+        public async Task<IActionResult> OnPostUploadExampleAsync()
+        {
+            var file = Request.Form.Files[0];
+            var lid = Request.Form["Lid"];
+            var rate = Request.Form["Rate"].ToString();
+
+            var content = await FileHelpers.ProcessFormFile(file, _permittedExtensions, _fileSizeLimit);
+            
+        
+            var f = new ExamplesFile
+            {
+                Content = content,
+                UntrustedName = file.FileName,
+                Size = file.Length,
+                
+                LearningOutcomeLId = Int32.Parse(lid.ToString()),
+                UploadDT = DateTime.UtcNow
+            };
+
+            switch (rate)
+            {
+                case "good": f.IsGood = true;break;
+                case "average": f.IsAverage = true;break;
+                case "bad": f.IsBad = true;break;
+            }
+
+            _context.ExamplesFile.Add(f);
+            await _context.SaveChangesAsync();
+
+            return StatusCode(200);
+        }
+
         public async Task<IActionResult> PastCourses(int course_name)
         {
             var courses = await _context.Courses
