@@ -49,4 +49,20 @@ namespace CS4540_A2.Models
         public Course Course { get; set; }
     }
 
+    public class Feedback
+    {
+        [Key]
+        public int fId { get; set; }
+        [Required]
+        public int cId { get; set; }
+        public Course Course { get; set; }
+        [Required]
+        public int CourseEffectiveRate { get; set; }
+        [Required]
+        public int CourseOrganizedRate { get; set; }
+        [Required]
+        public int CourseObjMetRate { get; set; }
+        [Required]
+        public int CourseOverallRate { get; set; }
+    }
 }

@@ -395,6 +395,66 @@ namespace CS4540_A2.Models
             context.SaveChanges();
 
             #endregion
+
+            #region FeedbackSeed
+            var feedbacks = new Feedback[]
+                {
+                new Feedback
+                {
+                    cId = 1,
+                    CourseEffectiveRate = 5, // out of 5
+                    CourseOrganizedRate = 4, // out of 5
+                    CourseObjMetRate = 4, // out of 5
+                    CourseOverallRate = 4 // out of 5
+                },
+                new Feedback
+                {
+                    cId = 2,
+                    CourseEffectiveRate = 5, // out of 5
+                    CourseOrganizedRate = 4, // out of 5
+                    CourseObjMetRate = 4, // out of 5
+                    CourseOverallRate = 4 // out of 5
+                },
+                new Feedback
+                {
+                    cId = 3,
+                    CourseEffectiveRate = 5, // out of 5
+                    CourseOrganizedRate = 5, // out of 5
+                    CourseObjMetRate = 5, // out of 5
+                    CourseOverallRate = 5 // out of 5
+                },
+                new Feedback
+                {
+                    cId = 4,
+                    CourseEffectiveRate = 3, // out of 5
+                    CourseOrganizedRate = 4, // out of 5
+                    CourseObjMetRate = 4, // out of 5
+                    CourseOverallRate = 4 // out of 5
+                },
+                new Feedback
+                {
+                    cId = 5,
+                    CourseEffectiveRate = 1, // out of 5
+                    CourseOrganizedRate = 3, // out of 5
+                    CourseObjMetRate = 2, // out of 5
+                    CourseOverallRate = 2 // out of 5
+                },
+                new Feedback
+                {
+                    cId = 6,
+                    CourseEffectiveRate = 3, // out of 5
+                    CourseOrganizedRate = 4, // out of 5
+                    CourseObjMetRate = 3, // out of 5
+                    CourseOverallRate = 3 // out of 5
+                }};
+
+            foreach (Feedback f in feedbacks)
+            {
+                context.Feedbacks.Add(f);
+            }
+            context.SaveChanges();
+
+            #endregion
         }
     }
 }

@@ -158,7 +158,7 @@ namespace CS4540_A2.Controllers
             ViewData["LOSNotes"] = map;
 
             if (courseNote.Count != 0)
-            {
+            {                                                                      
                 var note = courseNote.ElementAt(0);
                 ViewData["Note"] = note.Text;
                 ViewData["NoteTime"] = note.PostDate;
