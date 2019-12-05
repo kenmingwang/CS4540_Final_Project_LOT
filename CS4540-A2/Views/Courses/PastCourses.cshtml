@@ -31,6 +31,10 @@
 
             <div id="collapse@(Ccount)" class="collapse show" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
                 <table class="table table-hover table-striped">
+                    <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.CId" target="_blank"
+                       class=" btn btn-secondary w-100">
+                        Click to see Details of this course
+                    </a>
                     <thead>
                         <tr>
                             <th scope="col">Learning Outcome</th>

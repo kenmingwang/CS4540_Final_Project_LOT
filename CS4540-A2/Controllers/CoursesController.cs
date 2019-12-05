@@ -248,7 +248,7 @@ namespace CS4540_A2.Controllers
                 currentSemester = "SP";
             }
             var course = _context.Courses.Where(c => c.CId == request.FId).FirstOrDefault();
-            if (course.Year != 2020 || course.Semester != currentSemester)
+            if (course.Year != currentYear || course.Semester != currentSemester)
             {
                 return StatusCode(403);
             }
