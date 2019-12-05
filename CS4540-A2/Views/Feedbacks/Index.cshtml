@@ -13,19 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Course)
+                Course
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CourseEffectiveRate)
+                Effectiveness
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CourseOrganizedRate)
+                Organization
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CourseObjMetRate)
+                Objective Met
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CourseOverallRate)
+                Overall
             </th>
             <th></th>
         </tr>
@@ -33,20 +33,21 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            @*Credit Rating Star at CodePen: https://codepen.io/Bluetidepro/pen/GkpEa*@
             <td>
-                @Html.DisplayFor(modelItem => item.Course.Dept)
+                @Html.DisplayFor(modelItem => item.Course.Dept) @Html.DisplayFor(modelItem => item.Course.Number)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CourseEffectiveRate)
+                <div class="star-ratings-sprite"><span style="width: @Html.DisplayFor(modelItem => item.CourseEffectiveRate)%" class="star-ratings-sprite-rating"></span></div>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CourseOrganizedRate)
+                <div class="star-ratings-sprite"><span style="width: @Html.DisplayFor(modelItem => item.CourseOrganizedRate)%" class="star-ratings-sprite-rating"></span></div>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CourseObjMetRate)
+                <div class="star-ratings-sprite"><span style="width: @Html.DisplayFor(modelItem => item.CourseObjMetRate)%" class="star-ratings-sprite-rating"></span></div>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CourseOverallRate)
+                <div class="star-ratings-sprite"><span style="width: @Html.DisplayFor(modelItem => item.CourseOverallRate)%" class="star-ratings-sprite-rating"></span></div>
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.fId">Edit</a> |

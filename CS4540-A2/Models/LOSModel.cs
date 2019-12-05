@@ -57,12 +57,12 @@ namespace CS4540_A2.Models
         public int cId { get; set; }
         public Course Course { get; set; }
         [Required]
-        public int CourseEffectiveRate { get; set; }
+        public double CourseEffectiveRate { get; set; }
         [Required]
-        public int CourseOrganizedRate { get; set; }
+        public double CourseOrganizedRate { get; set; }
         [Required]
-        public int CourseObjMetRate { get; set; }
+        public double CourseObjMetRate { get; set; }
         [Required]
-        public int CourseOverallRate { get; set; }
+        public double CourseOverallRate { get; set; }
     }
 }

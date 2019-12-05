@@ -185,6 +185,26 @@ main {
     width: 0%;
 }
 
+/* Feedback Style */
+/* Credit Codepen: https://codepen.io/Bluetidepro/pen/GkpEa */
+.star-ratings-sprite {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/2605/star-rating-sprite.png") repeat-x;
+    font-size: 0;
+    height: 21px;
+    line-height: 0;
+    overflow: hidden;
+    text-indent: -999em;
+    width: 110px;
+}
+
+.star-ratings-sprite-rating {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/2605/star-rating-sprite.png") repeat-x;
+    background-position: 0 100%;
+    float: left;
+    height: 21px;
+    display: block;
+}
+
 /*footer {
     height: 75px;
     flex-shrink: 0;

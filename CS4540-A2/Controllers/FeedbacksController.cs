@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CS4540_A2.Data;
 using CS4540_A2.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace CS4540_A2.Controllers
 {
@@ -20,13 +22,23 @@ namespace CS4540_A2.Controllers
         }
 
         // GET: Feedbacks
+        [Authorize(Roles = "Admin,DepartmentChair,Instructor")]
         public async Task<IActionResult> Index()
         {
-            var lOSContext = _context.Feedbacks.Include(f => f.Course);
-            return View(await lOSContext.ToListAsync());
+            var feedbacks = await _context.Feedbacks.Include(f => f.Course).ToListAsync();
+            foreach (var f in feedbacks)
+            {
+                f.CourseEffectiveRate = (f.CourseEffectiveRate / 5) * 100;
+                f.CourseObjMetRate = (f.CourseObjMetRate / 5) * 100;
+                f.CourseOrganizedRate = (f.CourseOrganizedRate / 5) * 100;
+                f.CourseOverallRate = (f.CourseOverallRate / 5) * 100;
+            }
+
+            return View(feedbacks);
         }
 
         // GET: Feedbacks/Details/5
+        [Authorize(Roles = "Admin,DepartmentChair,Instructor")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,6 +52,13 @@ namespace CS4540_A2.Controllers
             if (feedback == null)
             {
                 return NotFound();
+            } 
+            else
+            {
+                feedback.CourseEffectiveRate = (feedback.CourseEffectiveRate / 5) * 100;
+                feedback.CourseObjMetRate = (feedback.CourseObjMetRate / 5) * 100;
+                feedback.CourseOrganizedRate = (feedback.CourseOrganizedRate / 5) * 100;
+                feedback.CourseOverallRate = (feedback.CourseOverallRate / 5) * 100;
             }
 
             return View(feedback);
@@ -48,7 +67,7 @@ namespace CS4540_A2.Controllers
         // GET: Feedbacks/Create
         public IActionResult Create()
         {
-            ViewData["cId"] = new SelectList(_context.Courses, "CId", "Dept");
+            ViewData["cId"] = new SelectList(_context.Courses, "CId", "Name");
             return View();
         }
 
@@ -65,7 +84,7 @@ namespace CS4540_A2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["cId"] = new SelectList(_context.Courses, "CId", "Dept", feedback.cId);
+            ViewData["cId"] = new SelectList(_context.Courses, "CId", "Name", feedback.cId);
             return View(feedback);
         }
 
@@ -83,6 +102,8 @@ namespace CS4540_A2.Controllers
                 return NotFound();
             }
             ViewData["cId"] = new SelectList(_context.Courses, "CId", "Dept", feedback.cId);
+            var course = await _context.Courses.Where(c => feedback.cId == c.CId).FirstOrDefaultAsync();
+            ViewData["cName"] = course.Name;
             return View(feedback);
         }
 
@@ -119,10 +140,13 @@ namespace CS4540_A2.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["cId"] = new SelectList(_context.Courses, "CId", "Dept", feedback.cId);
+            var course = await _context.Courses.Where(c => feedback.cId == c.CId).FirstOrDefaultAsync();
+            ViewData["cName"] = course.Name;
             return View(feedback);
         }
 
         // GET: Feedbacks/Delete/5
+        [Authorize(Roles = "Admin,DepartmentChair,Instructor")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -144,6 +168,7 @@ namespace CS4540_A2.Controllers
         // POST: Feedbacks/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,DepartmentChair,Instructor")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var feedback = await _context.Feedbacks.FindAsync(id);

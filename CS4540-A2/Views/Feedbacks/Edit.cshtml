@@ -2,11 +2,11 @@
 
 @{
     ViewData["Title"] = "Edit";
+    var cname = ViewData["cName"];
 }
 
-<h1>Edit</h1>
+<h1 style="text-align:center">Feedback Form For @cname</h1>
 
-<h4>Feedback</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,28 +14,60 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="fId" />
             <div class="form-group">
-                <label asp-for="cId" class="control-label"></label>
-                <select asp-for="cId" class="form-control" asp-items="ViewBag.cId"></select>
+                @*<label asp-for="cId" class="control-label"></label>*@
+                <input type="hidden" asp-for="cId" class="form-control"></input>
                 <span asp-validation-for="cId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CourseEffectiveRate" class="control-label"></label>
-                <input asp-for="CourseEffectiveRate" class="form-control" />
+                <input asp-for="CourseEffectiveRate" class="form-control" type="range" min="0" max="5" step="0.5" list="steplist" />
+                <datalist id="steplist">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </datalist>
                 <span asp-validation-for="CourseEffectiveRate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CourseOrganizedRate" class="control-label"></label>
-                <input asp-for="CourseOrganizedRate" class="form-control" />
+                <input asp-for="CourseOrganizedRate" class="form-control" type="range" min="0" max="5" step="0.5" list="steplist" />
+                <datalist id="steplist">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </datalist>
                 <span asp-validation-for="CourseOrganizedRate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CourseObjMetRate" class="control-label"></label>
-                <input asp-for="CourseObjMetRate" class="form-control" />
+                <input asp-for="CourseObjMetRate" class="form-control" type="range" min="0" max="5" step="0.5" list="steplist" />
+                <datalist id="steplist">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </datalist>
                 <span asp-validation-for="CourseObjMetRate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CourseOverallRate" class="control-label"></label>
-                <input asp-for="CourseOverallRate" class="form-control" />
+                <input asp-for="CourseOverallRate" class="form-control" type="range" min="0" max="5" step="0.5" list="steplist" />
+                <datalist id="steplist">
+                    <option>0</option>
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </datalist>
                 <span asp-validation-for="CourseOverallRate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -45,9 +77,9 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@*<div>
+        <a asp-action="Index">Back to List</a>
+    </div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

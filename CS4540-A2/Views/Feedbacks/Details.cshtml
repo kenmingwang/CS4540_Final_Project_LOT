@@ -4,41 +4,46 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+    <h1 style="text-align:center">@Html.DisplayFor(model => model.Course.Dept) @Html.DisplayFor(model => model.Course.Number) Feedback</h1>
 
 <div>
-    <h4>Feedback</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Course)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Course.Dept)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.Name)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CourseEffectiveRate)
+        <dt class="col-sm-2">
+            Professor Email
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CourseEffectiveRate)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.Email)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CourseOrganizedRate)
+        <dt class="col-sm-2">
+            Effectiveness
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CourseOrganizedRate)
+        <dd class="col-sm-10">
+            <div class="star-ratings-sprite" style="margin:none"><span style="width: @Html.DisplayFor(model => model.CourseEffectiveRate)%" class="star-ratings-sprite-rating"></span></div>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CourseObjMetRate)
+        <dt class="col-sm-2">
+            Organization
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CourseObjMetRate)
+        <dd class="col-sm-10">
+            <div class="star-ratings-sprite" style="margin:none"><span style="width: @Html.DisplayFor(model => model.CourseOrganizedRate)%" class="star-ratings-sprite-rating"></span></div>
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CourseOverallRate)
+        <dt class="col-sm-2">
+            Objective Met
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CourseOverallRate)
+        <dd class="col-sm-10">
+            <div class="star-ratings-sprite" style="margin:none"><span style="width: @Html.DisplayFor(model => model.CourseObjMetRate)%" class="star-ratings-sprite-rating"></span></div>
+        </dd>
+        <dt class="col-sm-2">
+            Overall
+        </dt>
+        <dd class="col-sm-10">
+            <div class="star-ratings-sprite" style="margin:none"><span style="width: @Html.DisplayFor(model => model.CourseOverallRate)%" class="star-ratings-sprite-rating"></span></div>
         </dd>
     </dl>
 </div>
