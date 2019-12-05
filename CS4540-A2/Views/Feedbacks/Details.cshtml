@@ -1,0 +1,53 @@
+﻿@model CS4540_A2.Models.Feedback
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+    <h1 style="text-align:center">@Html.DisplayFor(model => model.Course.Dept) @Html.DisplayFor(model => model.Course.Number) Feedback</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Course)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Professor Email
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Course.Email)
+        </dd>
+        <dt class="col-sm-2">
+            Effectiveness
+        </dt>
+        <dd class="col-sm-10">
+            <div class="star-ratings-sprite" style="margin:none"><span style="width: @Html.DisplayFor(model => model.CourseEffectiveRate)%" class="star-ratings-sprite-rating"></span></div>
+        </dd>
+        <dt class="col-sm-2">
+            Organization
+        </dt>
+        <dd class="col-sm-10">
+            <div class="star-ratings-sprite" style="margin:none"><span style="width: @Html.DisplayFor(model => model.CourseOrganizedRate)%" class="star-ratings-sprite-rating"></span></div>
+        </dd>
+        <dt class="col-sm-2">
+            Objective Met
+        </dt>
+        <dd class="col-sm-10">
+            <div class="star-ratings-sprite" style="margin:none"><span style="width: @Html.DisplayFor(model => model.CourseObjMetRate)%" class="star-ratings-sprite-rating"></span></div>
+        </dd>
+        <dt class="col-sm-2">
+            Overall
+        </dt>
+        <dd class="col-sm-10">
+            <div class="star-ratings-sprite" style="margin:none"><span style="width: @Html.DisplayFor(model => model.CourseOverallRate)%" class="star-ratings-sprite-rating"></span></div>
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.fId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

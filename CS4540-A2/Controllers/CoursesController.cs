@@ -69,7 +69,7 @@ namespace CS4540_A2.Controllers
             // return View(await _context.Courses.ToListAsync());
         }
 
-        public async Task<IActionResult> OnGetDownloadDbAsync(int? id)
+        public async Task<IActionResult> OnGetDownloadDbSyllabusAsync(int? id)
         {
             if (id == null)
             {
@@ -87,6 +87,34 @@ namespace CS4540_A2.Controllers
 
             // Don't display the untrusted file name in the UI. HTML-encode the value.
             return File(requestFile.Content, MediaTypeNames.Application.Octet, WebUtility.HtmlEncode(requestFile.UntrustedName));
+        }
+
+        public async Task<IActionResult> OnGetDownloadDbExampleAsync(int? id,string rate)
+        {
+            if (id == null)
+            {
+                return View();
+            }
+
+
+            var requestFile = await _context.ExamplesFile.Where(m => m.LearningOutcomeLId == id).ToListAsync();
+
+            ExamplesFile file = null;
+            switch (rate)
+            {
+                case "good": file = requestFile.SingleOrDefault(m => m.IsGood == true);break;
+                case "average": file = requestFile.SingleOrDefault(m => m.IsAverage == true); break;
+                case "bad": file = requestFile.SingleOrDefault(m => m.IsBad == true); break;
+
+            }
+
+            if (file == null)
+            {
+                return View();
+            }
+
+            // Don't display the untrusted file name in the UI. HTML-encode the value.
+            return File(file.Content, MediaTypeNames.Application.Octet, WebUtility.HtmlEncode(file.UntrustedName));
         }
 
         // GET: Courses/Details?cId=1
@@ -130,7 +158,7 @@ namespace CS4540_A2.Controllers
             ViewData["LOSNotes"] = map;
 
             if (courseNote.Count != 0)
-            {
+            {                                                                      
                 var note = courseNote.ElementAt(0);
                 ViewData["Note"] = note.Text;
                 ViewData["NoteTime"] = note.PostDate;
@@ -168,13 +196,34 @@ namespace CS4540_A2.Controllers
                 ViewData["Role"] = "Instructor";
             }
 
-            var assign = await _context.SyllabusFile.AsNoTracking().ToListAsync();
             Dictionary<int, int> LOSFileIDMap = new Dictionary<int, int>();
-            foreach (var ass in assign)
+            Dictionary<int, int[]> ExampleIDMap = new Dictionary<int, int[]>();
+
+            foreach(LearningOutcome l in LOS)
             {
-                LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
+                var ass = _context.SyllabusFile.Where(a => a.LearningOutcomeLId == l.LId).FirstOrDefault();
+                var goodEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsGood == true).FirstOrDefault();
+                var averageEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsAverage == true).FirstOrDefault(); ;
+                var badEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsBad == true).FirstOrDefault();
+
+                if(ass != null)
+                {
+                    LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
+                }
+
+                int[] Exs = new int[3];
+                Exs[0] = goodEx == null ? -1 : goodEx.Id;
+                Exs[1] = averageEx == null ? -1 : averageEx.Id;
+                Exs[2] = badEx == null ? -1 : badEx.Id;
+
+                if (Exs[0] == -1 && Exs[1] == -1 && Exs[2] == -1)
+                    continue;
+
+                ExampleIDMap.Add(l.LId, Exs);
             }
             ViewData["AssignmentMap"] = LOSFileIDMap;
+            ViewData["ExampleMap"] = ExampleIDMap;
+
             return View(course);
         }
         /* 
@@ -216,22 +265,47 @@ namespace CS4540_A2.Controllers
                 return NotFound();
             }
 
+            List<LearningOutcome> LOSS = new List<LearningOutcome>();
             foreach (Course c in courses)
             {
                 var LOS = await _context.LOS.Where(LO => LO.CourseCId == c.CId).ToListAsync();
                 c.LOS = LOS;
+                foreach(LearningOutcome l in LOS)
+                {
+                    LOSS.Add(l);
+                }
             }
-
-
             ViewData["Courses"] = courses;
             ViewData["Name"] = ProfessorUserName;
-            var assign = await _context.SyllabusFile.AsNoTracking().ToListAsync();
+
             Dictionary<int, int> LOSFileIDMap = new Dictionary<int, int>();
-            foreach (var ass in assign)
+            Dictionary<int, int[]> ExampleIDMap = new Dictionary<int, int[]>();
+
+            foreach (LearningOutcome l in LOSS)
             {
-                LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
+                var ass = _context.SyllabusFile.Where(a => a.LearningOutcomeLId == l.LId).FirstOrDefault();
+                var goodEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsGood == true).FirstOrDefault();
+                var averageEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsAverage == true).FirstOrDefault(); ;
+                var badEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsBad == true).FirstOrDefault();
+
+                if (ass != null)
+                {
+                    LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
+                }
+
+                int[] Exs = new int[3];
+                Exs[0] = goodEx == null ? -1 : goodEx.Id;
+                Exs[1] = averageEx == null ? -1 : averageEx.Id;
+                Exs[2] = badEx == null ? -1 : badEx.Id;
+
+                if (Exs[0] == -1 && Exs[1] == -1 && Exs[2] == -1)
+                    continue;
+
+                ExampleIDMap.Add(l.LId, Exs);
             }
             ViewData["AssignmentMap"] = LOSFileIDMap;
+            ViewData["ExampleMap"] = ExampleIDMap;
+
             return View(courses);
         }
         public async Task<IActionResult> onPostSubmitNoteAsync([FromBody] NoteData request)
@@ -348,16 +422,67 @@ namespace CS4540_A2.Controllers
 
             var content = await FileHelpers.ProcessFormFile(file, _permittedExtensions, _fileSizeLimit);
 
+            if(content.Length == 0)
+            {
+                return StatusCode(405);
+            }
+
+            // Check if there's a file there already for this LOS, if so delete it before add.
+            var prevFile = _context.SyllabusFile.FirstOrDefault(m => m.LearningOutcomeLId == int.Parse(lid.ToString()));
+            if (prevFile != null)
+            {
+                _context.Remove(prevFile);  
+            }
+
             var f = new AssignmentFile
             {
                 Content = content,
                 UntrustedName = file.FileName,
                 Size = file.Length,
-                LearningOutcomeLId = Int32.Parse(lid.ToString()),
+                LearningOutcomeLId = int.Parse(lid.ToString()),
                 UploadDT = DateTime.UtcNow
             };
 
             _context.SyllabusFile.Add(f);
+            await _context.SaveChangesAsync();
+
+            return StatusCode(200);
+        }
+
+        public async Task<IActionResult> OnPostUploadExampleAsync()
+        {
+            var file = Request.Form.Files[0];
+            var lid = Request.Form["Lid"];
+            var rate = Request.Form["Rate"].ToString();
+
+            var content = await FileHelpers.ProcessFormFile(file, _permittedExtensions, _fileSizeLimit);
+
+            // Check if there's a file there already for this LOS, if so delete it before add.
+            var prevFile = _context.ExamplesFile.FirstOrDefault(m => m.LearningOutcomeLId == int.Parse(lid.ToString()));
+            if (prevFile != null)
+            {
+                if (prevFile.IsGood && rate == "good" || prevFile.IsAverage && rate == "average" || prevFile.IsBad && rate == "bad")
+                    _context.ExamplesFile.Remove(prevFile);
+            }
+
+            var f = new ExamplesFile
+            {
+                Content = content,
+                UntrustedName = file.FileName,
+                Size = file.Length,
+                
+                LearningOutcomeLId = Int32.Parse(lid.ToString()),
+                UploadDT = DateTime.UtcNow
+            };
+
+            switch (rate)
+            {
+                case "good": f.IsGood = true;break;
+                case "average": f.IsAverage = true;break;
+                case "poor": f.IsBad = true;break;
+            }
+
+            _context.ExamplesFile.Add(f);
             await _context.SaveChangesAsync();
 
             return StatusCode(200);

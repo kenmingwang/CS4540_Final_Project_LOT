@@ -1,0 +1,60 @@
+﻿@model IEnumerable<CS4540_A2.Models.Feedback>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Course
+            </th>
+            <th>
+                Effectiveness
+            </th>
+            <th>
+                Organization
+            </th>
+            <th>
+                Objective Met
+            </th>
+            <th>
+                Overall
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            @*Credit Rating Star at CodePen: https://codepen.io/Bluetidepro/pen/GkpEa*@
+            <td>
+                @Html.DisplayFor(modelItem => item.Course.Dept) @Html.DisplayFor(modelItem => item.Course.Number)
+            </td>
+            <td>
+                <div class="star-ratings-sprite"><span style="width: @Html.DisplayFor(modelItem => item.CourseEffectiveRate)%" class="star-ratings-sprite-rating"></span></div>
+            </td>
+            <td>
+                <div class="star-ratings-sprite"><span style="width: @Html.DisplayFor(modelItem => item.CourseOrganizedRate)%" class="star-ratings-sprite-rating"></span></div>
+            </td>
+            <td>
+                <div class="star-ratings-sprite"><span style="width: @Html.DisplayFor(modelItem => item.CourseObjMetRate)%" class="star-ratings-sprite-rating"></span></div>
+            </td>
+            <td>
+                <div class="star-ratings-sprite"><span style="width: @Html.DisplayFor(modelItem => item.CourseOverallRate)%" class="star-ratings-sprite-rating"></span></div>
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.fId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.fId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.fId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
