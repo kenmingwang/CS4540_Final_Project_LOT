@@ -56,13 +56,10 @@ namespace CS4540_A2.Controllers
             {
                 if (user.Email == c.Email)
                 {
-                    names.Add(c.Dept + c.Number + " " + c.Name);
+                    names.Add(c.Dept + c.Number + " " + c.Name +" "+ c.Semester);
                     address.Add("/Courses/Details/" + c.CId);
                 }
-                else
-                { 
-                    
-                }
+             
             }
 
             //foreach (LearningOutcome l in lo)
@@ -83,13 +80,43 @@ namespace CS4540_A2.Controllers
             //    names.Add(c.LO.Course.Dept + c.LO.Course.Number + " " + c.LO.Course.Name);
             //    address.Add("/LearningOutcomes/Details/" + c.LO.Course.Number);
             //}
-
-            return Json(new { success = true, names, address });
+            return Json(new { success = true, names });
         }
         public JsonResult search_class(string text) 
         {
-            Course c = _context.Courses.Where(e => e.Number.ToString() == text).FirstOrDefault();
-            return Json(new { success = true, add = "/Courses/Details/" + c.CId});
+            if (text.Split(' ').Length == 4)
+            {
+                string num = text.Substring(2, 4);
+
+                string sem = text.Split(' ')[3];
+                Course c = _context.Courses.Where(e => e.Number.ToString() == num).Where(e => e.Semester == sem)
+                    //.Where(e => e.Semester.ToString() == text)
+                    //.Where(e => e.Year.ToString() == text)
+                    .FirstOrDefault();
+                return Json(new { success = true, add = "/Courses/Details/" + c.CId });
+            }
+            else if (text.Split(' ').Length == 5) {
+                string num = text.Substring(2,4);
+                string sem = text.Split(' ')[4];
+                Course c = _context.Courses.Where(e => e.Number.ToString() == num).Where(e => e.Semester == sem)
+                    //.Where(e => e.Semester.ToString() == text)
+                    //.Where(e => e.Year.ToString() == text)
+                    .FirstOrDefault();
+                return Json(new { success = true, add = "/Courses/Details/" + c.CId });
+            }
+            else if (text.Split(' ').Length == 3)
+            {
+                string num = text.Substring(2, 4);
+
+                string sem = text.Split(' ')[2];
+                Course c = _context.Courses.Where(e => e.Number.ToString() == num).Where(e => e.Semester == sem)
+                    //.Where(e => e.Semester.ToString() == text)
+                    //.Where(e => e.Year.ToString() == text)
+                    .FirstOrDefault();
+                return Json(new { success = true, add = "/Courses/Details/" + c.CId });
+            }
+            return null;
         }
+
     }
 }

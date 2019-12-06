@@ -65,7 +65,7 @@ $('#search-button').autoComplete({
         $.ajax({
         }).done(function(res) {
             console.log("action take: " + res);
-            window.location.href = address[names.indexOf(term)];
+           window.location.href = address[names.indexOf(term)];
 
 
         }).fail(function(jqXHR, textStatus, errorThrown) {
