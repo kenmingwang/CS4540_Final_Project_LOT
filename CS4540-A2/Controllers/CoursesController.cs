@@ -50,7 +50,7 @@ namespace CS4540_A2.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            var Courses = await _context.Courses.OrderBy(course => course.Number).ToListAsync();
+            var Courses = await _context.Courses.OrderBy(course => course.Number).Include("LOS").ToListAsync();
 
             var CoursesPerSemester = _context.Courses.GroupBy(y => new { y.Year, y.Semester }).OrderByDescending(y => y.Key.Year)
                 .Select(x => new CoursePerSemester()
@@ -72,6 +72,23 @@ namespace CS4540_A2.Controllers
                 }
                 map.Add(c, Professor.UserName);
             }
+
+            Dictionary<Course, int> progressMap = new Dictionary<Course, int>();
+            foreach(Course c in Courses)
+            {
+                float max = c.LOS.Count * 4;
+                float total = 0;
+               foreach(LearningOutcome l in c.LOS)
+                {
+                    var AssFile = _context.SyllabusFile.Where(e => e.LearningOutcomeLId == l.LId).FirstOrDefault();
+                    var ExFile = _context.ExamplesFile.Where(e => e.LearningOutcomeLId == l.LId).ToList();
+                    if (AssFile != null)
+                        total += 1;
+                    total += ExFile.Count;
+                }
+                progressMap.Add(c, (int)Math.Round((total / max) * 100));
+            }
+            ViewData["ProgressMap"] = progressMap;
             ViewData["CoursesMap"] = map;
             ViewData["CoursesPerSemester"] = CoursesPerSemester;
             return View();

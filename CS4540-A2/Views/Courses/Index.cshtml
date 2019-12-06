@@ -8,7 +8,10 @@
 @{
     List<CoursePerSemester> courses = ViewData["CoursesPerSemester"] as List<CoursePerSemester>;
     Dictionary<Course, string> map = ViewData["CoursesMap"] as Dictionary<Course, string>;
+    Dictionary<Course, int> progressMap = ViewData["ProgressMap"] as Dictionary<Course, int>;
+
     int cardCounter = 0;
+    int progressCounter = 0;
 }
 
 
@@ -42,6 +45,7 @@
                     <tbody>
                         @foreach (var c in coursePS.Courses)
                         {
+                            var progress = progressMap[c];
                             var username = map[c];
                             var name = UserNameAndRolesUtil.UserNameToActualName(username);
                             <tr>
@@ -55,7 +59,8 @@
                                 <td><a asp-action="DetailsProfessor" asp-route-ProfessorUserName="@map[c]">@name[0] @name[1]</a></td>
                                 <td>
                                     <div class="progress">
-                                        <div id="progress-bar" class="progress-bar progress-bar-striped" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                                        
+                                        <div id="progress-bar_@progressCounter" class="progress-bar progress-bar-striped" role="progressbar" style="width: @(progress)%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
                                         </div>
                                     </div>
                                 </td>
