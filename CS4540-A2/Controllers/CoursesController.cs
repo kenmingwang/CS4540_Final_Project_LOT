@@ -163,9 +163,9 @@ namespace CS4540_A2.Controllers
         // GET: Courses/Details?cId=1
         public async Task<IActionResult> Details(int cId)
         {
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m =>
-               m.CId == cId);
+            var course = await _context.Courses.Where(m =>
+               m.CId == cId).Include("LOS")
+                .FirstOrDefaultAsync();
 
             if (course == null)
             {
@@ -266,6 +266,18 @@ namespace CS4540_A2.Controllers
             }
             ViewData["AssignmentMap"] = LOSFileIDMap;
             ViewData["ExampleMap"] = ExampleIDMap;
+
+            float max = LOS.Count * 4;
+            float total = 0;
+            foreach (LearningOutcome l in LOS)
+            {
+                var AssFile = _context.SyllabusFile.Where(e => e.LearningOutcomeLId == l.LId).FirstOrDefault();
+                var ExFile = _context.ExamplesFile.Where(e => e.LearningOutcomeLId == l.LId).ToList();
+                if (AssFile != null)
+                    total += 1;
+                total += ExFile.Count;
+            }
+            ViewData["Completion"] = (int)Math.Round((total / max) * 100);
 
             return View(course);
         }
