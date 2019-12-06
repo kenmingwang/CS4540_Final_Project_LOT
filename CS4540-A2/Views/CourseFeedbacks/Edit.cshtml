@@ -1,0 +1,53 @@
+﻿@model CS4540_A2.Models.CourseFeedback
+
+@{
+    ViewData["Title"] = "Edit";
+    var cname = ViewData["cName"];
+}
+
+<h1 style="text-align:center">Feedback Form For @cname</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="fId" />
+            <div class="form-group">
+                <label asp-for="cId" class="control-label">Course Name</label>
+                <select asp-for="cId" class="form-control" asp-items="ViewBag.cId"></select>
+                <span asp-validation-for="cId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvgCourseEffectiveRate" class="control-label"></label>
+                <input asp-for="AvgCourseEffectiveRate" class="form-control" />
+                <span asp-validation-for="AvgCourseEffectiveRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvgCourseOrganizedRate" class="control-label"></label>
+                <input asp-for="AvgCourseOrganizedRate" class="form-control" />
+                <span asp-validation-for="AvgCourseOrganizedRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvgCourseObjMetRate" class="control-label"></label>
+                <input asp-for="AvgCourseObjMetRate" class="form-control" />
+                <span asp-validation-for="AvgCourseObjMetRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AvgCourseOverallRate" class="control-label"></label>
+                <input asp-for="AvgCourseOverallRate" class="form-control" />
+                <span asp-validation-for="AvgCourseOverallRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

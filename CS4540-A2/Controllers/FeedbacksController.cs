@@ -25,13 +25,14 @@ namespace CS4540_A2.Controllers
         [Authorize(Roles = "Admin,DepartmentChair,Instructor")]
         public async Task<IActionResult> Index()
         {
-            var feedbacks = await _context.Feedbacks.Include(f => f.Course).ToListAsync();
+            var feedbacks = await _context.Feedbacks.OrderBy(f => f.Course.Number).Include(f => f.Course).ToListAsync();
             foreach (var f in feedbacks)
-            {
+            {  
+                // percentage
                 f.CourseEffectiveRate = (f.CourseEffectiveRate / 5) * 100;
                 f.CourseObjMetRate = (f.CourseObjMetRate / 5) * 100;
                 f.CourseOrganizedRate = (f.CourseOrganizedRate / 5) * 100;
-                f.CourseOverallRate = (f.CourseOverallRate / 5) * 100;
+                f.CourseOverallRate = (f.CourseOrganizedRate / 5) * 100;
             }
 
             return View(feedbacks);
@@ -55,10 +56,11 @@ namespace CS4540_A2.Controllers
             } 
             else
             {
+                // percentage
                 feedback.CourseEffectiveRate = (feedback.CourseEffectiveRate / 5) * 100;
                 feedback.CourseObjMetRate = (feedback.CourseObjMetRate / 5) * 100;
                 feedback.CourseOrganizedRate = (feedback.CourseOrganizedRate / 5) * 100;
-                feedback.CourseOverallRate = (feedback.CourseOverallRate / 5) * 100;
+                feedback.CourseOverallRate = (feedback.CourseOrganizedRate / 5) * 100;
             }
 
             return View(feedback);
@@ -89,6 +91,7 @@ namespace CS4540_A2.Controllers
         }
 
         // GET: Feedbacks/Edit/5
+        [Authorize(Roles = "Admin,DepartmentChair,Instructor")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -101,7 +104,7 @@ namespace CS4540_A2.Controllers
             {
                 return NotFound();
             }
-            ViewData["cId"] = new SelectList(_context.Courses, "CId", "Dept", feedback.cId);
+            ViewData["cId"] = new SelectList(_context.Courses, "CId", "Name", feedback.cId);
             var course = await _context.Courses.Where(c => feedback.cId == c.CId).FirstOrDefaultAsync();
             ViewData["cName"] = course.Name;
             return View(feedback);
@@ -112,6 +115,7 @@ namespace CS4540_A2.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,DepartmentChair,Instructor")]
         public async Task<IActionResult> Edit(int id, [Bind("fId,cId,CourseEffectiveRate,CourseOrganizedRate,CourseObjMetRate,CourseOverallRate")] Feedback feedback)
         {
             if (id != feedback.fId)
@@ -139,7 +143,7 @@ namespace CS4540_A2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["cId"] = new SelectList(_context.Courses, "CId", "Dept", feedback.cId);
+            ViewData["cId"] = new SelectList(_context.Courses, "CId", "Name", feedback.cId);
             var course = await _context.Courses.Where(c => feedback.cId == c.CId).FirstOrDefaultAsync();
             ViewData["cName"] = course.Name;
             return View(feedback);
