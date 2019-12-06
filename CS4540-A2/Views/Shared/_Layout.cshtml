@@ -34,7 +34,7 @@
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
 
     </environment>
-
+    <link rel="stylesheet" href="~/css/jquery.auto-complete.css" />
 </head>
 <body>
     <div class="header">
@@ -48,12 +48,12 @@
                 </span>
             </div>
             <div class="nav-right-search">
-                <div class="search-box">
-                    <input class="search-txt" type="text" placeholder="Type to search" />
-                    <a class="search-btn" href="#">
+                <form class="search-box">
+                    <input id ="search-button"class="search-txt" type="text" placeholder="Type to search" />
+                    <button onclick="search_function()" class="search-btn" href="#">
                         <i class="fas fa-search"></i>
-                    </a>
-                </div>
+                    </button>
+                </form>
             </div>
             <!-- Search form -->
         </header>
@@ -103,6 +103,7 @@
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/js/jquery.auto-complete.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
         <script src="https://kit.fontawesome.com/db17860b98.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
@@ -119,7 +120,8 @@
         </script>
         <script src="https://kit.fontawesome.com/db17860b98.js"></script>
     </environment>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/site.js"></script>
+    
 
     @RenderSection("Scripts", required: false)
 </body>
