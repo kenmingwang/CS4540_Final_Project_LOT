@@ -9,6 +9,111 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <div class="form-group">
+            <label asp-for="cId" class="control-label">Course Name</label>
+            <select asp-for="cId" class="form-control" asp-items="ViewBag.cId"></select>
+            <span asp-validation-for="cId" class="text-danger"></span>
+        </div>
+
+        <h3>Overall Rating</h3>
+        <form class="rating">
+            <label>
+                <input type="radio" name="stars" value="1" />
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="2" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="3" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="4" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="5" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+        </form>
+        <h3>Overall Rating</h3>
+        <form class="rating">
+            <label>
+                <input type="radio" name="stars" value="1" />
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="2" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="3" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="4" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="5" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+        </form>
+        <h3>Overall Rating</h3>
+        <form class="rating">
+            <label>
+                <input type="radio" name="stars" value="1" />
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="2" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="3" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="4" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+            <label>
+                <input type="radio" name="stars" value="5" />
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+                <span class="icon">★</span>
+            </label>
+        </form>
         <h3>Overall Rating</h3>
         <form class="rating">
             <label>
@@ -71,7 +176,7 @@
     }
 
     function Create() {
-        GetRatings();
-       console.log('Test ' + r1); 
+        var radioValue = $("input[name='stars']:checked").val();
+       console.log('Test ' + radioValue); 
     }
 </script>

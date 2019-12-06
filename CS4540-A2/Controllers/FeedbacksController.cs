@@ -66,6 +66,12 @@ namespace CS4540_A2.Controllers
             return View(feedback);
         }
 
+        public async Task<IActionResult> SurveyLink(int cid)
+        {
+            ViewData["Course"] = await _context.Courses.Where(c => c.CId == cid).FirstOrDefaultAsync();
+            return View();
+        }
+
         // GET: Feedbacks/Create
         public IActionResult Create()
         {
@@ -184,6 +190,39 @@ namespace CS4540_A2.Controllers
         private bool FeedbackExists(int id)
         {
             return _context.Feedbacks.Any(e => e.fId == id);
+        }
+
+        public async Task<IActionResult> onPostSubmitSurvey([FromBody] FeedBackData request)
+        {
+
+            Feedback fb = new Feedback();
+            fb.cId = request.cID;
+            fb.CourseEffectiveRate = request.eff;
+            fb.CourseOrganizedRate = request.org;
+            fb.CourseObjMetRate = request.obj;
+            fb.CourseOverallRate = request.overall;
+
+            try
+            {
+                _context.Feedbacks.Add(fb);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.ToString(), "An error occurred while creating roles");
+                return StatusCode(405);
+            }
+            return StatusCode(200);
+        }
+
+        public class FeedBackData
+        {
+            public int cID { get; set; }
+            public int eff { get; set; }
+            public int org { get; set; }
+            public int obj { get; set; }
+            public int overall { get; set; }
+
         }
     }
 }
