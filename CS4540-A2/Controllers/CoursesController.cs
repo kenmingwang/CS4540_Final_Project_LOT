@@ -583,6 +583,10 @@ namespace CS4540_A2.Controllers
                 .Where(m =>
                m.Number == number).OrderByDescending(course => course.Year).ToListAsync();
 
+            var coursesSortByOverall = await _context.Courses
+                .Where(m =>
+               m.Number == number).OrderByDescending(course => course.Year).ToListAsync();
+
             if (courses == null)
             {
                 return NotFound();
@@ -656,9 +660,6 @@ namespace CS4540_A2.Controllers
         public string semester { get; set; }
         public List<Course> Courses { get; set; }
     }
-
-
-
 
     public class NoteData
     {

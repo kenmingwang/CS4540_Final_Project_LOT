@@ -142,21 +142,22 @@ main {
 }
 
 .icon-logout {
-    font-size:smaller;
+    font-size: smaller;
 }
 
 /* Main body style */
 #accordion {
     margin-top: 20px;
 }
+
 .table-header-color {
     color: #EE4B3E;
 }
 
 .badge {
-    font-weight:300;
-    color:white;
-    font-family:Arial, Helvetica, sans-serif;
+    font-weight: 300;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 50%;
     bottom: 5px;
     position: relative;
@@ -167,15 +168,15 @@ main {
 }
 
 .btn-edit {
-    font-size:13px;
-    position:relative;
-    bottom:1px;
+    font-size: 13px;
+    position: relative;
+    bottom: 1px;
 }
 
 .display-4 {
-    font-size:40px;
-    margin-top:20px;
-    text-align:center;
+    font-size: 40px;
+    margin-top: 20px;
+    text-align: center;
 }
 
 .center {
@@ -218,24 +219,24 @@ main {
     font-size: 15px;
 }
 
-.logout-p{
-    margin-top:-1px;
+.logout-p {
+    margin-top: -1px;
 }
 
 label {
     cursor: pointer;
 }
 
-.td-width{
-    width:500px;
+.td-width {
+    width: 500px;
 }
 
-.save-btn{
-    min-width:100px !important;
+.save-btn {
+    min-width: 100px !important;
 }
 
-.text-red{
-    color:orangered;
+.text-red {
+    color: orangered;
 }
 
 .isDisabled {
@@ -245,3 +246,69 @@ label {
     text-decoration: none;
     pointer-events: none;
 }
+
+.rating {
+    display: inline-block;
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    font-size: 50px;
+}
+
+    .rating label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        cursor: pointer;
+    }
+
+        .rating label:last-child {
+            position: static;
+        }
+
+        .rating label:nth-child(1) {
+            z-index: 5;
+        }
+
+        .rating label:nth-child(2) {
+            z-index: 4;
+        }
+
+        .rating label:nth-child(3) {
+            z-index: 3;
+        }
+
+        .rating label:nth-child(4) {
+            z-index: 2;
+        }
+
+        .rating label:nth-child(5) {
+            z-index: 1;
+        }
+
+        .rating label input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+        }
+
+        .rating label .icon {
+            float: left;
+            color: transparent;
+        }
+
+        .rating label:last-child .icon {
+            color: #000;
+        }
+
+    .rating:not(:hover) label input:checked ~ .icon,
+    .rating:hover label:hover input ~ .icon {
+        color: #09f;
+    }
+
+    .rating label input:focus:not(:checked) ~ .icon:last-child {
+        color: #000;
+        text-shadow: 0 0 5px #09f;
+    }

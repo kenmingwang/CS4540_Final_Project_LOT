@@ -63,8 +63,6 @@ $('#search-button').autoComplete({
     },
     onSelect: function(e, term, item) {
         $.ajax({
-
-
         }).done(function(res) {
             console.log("action take: " + res);
             window.location.href = address[names.indexOf(term)];
@@ -76,11 +74,6 @@ $('#search-button').autoComplete({
             console.log(textStatus);
             console.log(errorThrown);
             alert("Warning");
-
         });
-
-
     }
-
-
 });
