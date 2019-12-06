@@ -12,6 +12,7 @@ using CS4540_A2.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using CS4540_A2.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace CS4540_A2.Controllers
 {
@@ -19,10 +20,12 @@ namespace CS4540_A2.Controllers
     {
         private readonly LOSContext _context;
         private readonly List<string> names = new List<string>();
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly List<string> address = new List<string>();
-        public HomeController(LOSContext context)
+        public HomeController(LOSContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -41,18 +44,25 @@ namespace CS4540_A2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public JsonResult Update()
+        public async Task<JsonResult> Update()
         {
             List<Course> course = _context.Courses.ToList();
+            var user = await _userManager.FindByIdAsync(_userManager.GetUserId(User));
             //List<LearningOutcome> lo = _context.LOS.ToList();
             //List<CourseNote> cn = _context.CourseNotes.ToList();
             //List<LOSNote> losn = _context.LOSNotes.ToList();
-
+            
             foreach (Course c in course)
             {
-
-                names.Add(c.Dept + c.Number + " " + c.Name);
-                address.Add("/Courses/PastCourses/" + c.Number);
+                if (user.Email == c.Email)
+                {
+                    names.Add(c.Dept + c.Number + " " + c.Name);
+                    address.Add("/Courses/Details/" + c.CId);
+                }
+                else
+                { 
+                    
+                }
             }
             //foreach (LearningOutcome l in lo)
             //{
@@ -73,6 +83,11 @@ namespace CS4540_A2.Controllers
             //    address.Add("/LearningOutcomes/Details/" + c.LO.Course.Number);
             //}
             return Json(new { success = true, names, address });
+        }
+        public JsonResult search_class(string text) 
+        {
+            Course c = _context.Courses.Where(e => e.Number.ToString() == text).FirstOrDefault();
+            return Json(new { success = true, add = "/Courses/Details/" + c.CId});
         }
     }
 }

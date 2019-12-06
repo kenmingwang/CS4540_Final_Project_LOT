@@ -1,34 +1,36 @@
 ﻿var names;
 var address;
+
 function search_function() {
     var check_input = document.getElementById("search-button").value;
     if (check_input != "") {
         $.ajax({
-            //   url: "/Home/searchingPro",
-            //   data:{
+            url: "/Home/search_class",
+            data: {
 
-            //   input: check_input
-            //    },
-            //}
-            //   method: e.srcElement.method
+                text: check_input
+            },
+
+          //  method: e.srcElement.method
 
         }).done(function (res) {
-            console.log("action taken: " + res);
-            if (check_input == 4400)
-                window.location.href = "/Courses/PastCourses/4400";
-            else if (check_input == 3500)
-                window.location.href = "/Courses/PastCourses/3500";
-            else if (check_input == 3505)
-                window.location.href = "/Courses/PastCourses/3505";
-            else if (check_input == 2100)
-                window.location.href = "/Courses/PastCourses/2100";
-            else if (check_input == 4540)
-                window.location.href = "/Courses/PastCourses/4540";
-            else if (check_input == 2420)
-                window.location.href = "/Courses/PastCourses/2420";
-            else {
-                alert("No such this course");
-            }
+            window.location.href = res.add;
+            //    console.log("action taken: " + res);
+            //    if (check_input == 4400)
+            //        window.location.href = "/Courses/PastCourses/4400";
+            //    else if (check_input == 3500)
+            //        window.location.href = "/Courses/PastCourses/3500";
+            //    else if (check_input == 3505)
+            //        window.location.href = "/Courses/PastCourses/3505";
+            //    else if (check_input == 2100)
+            //        window.location.href = "/Courses/PastCourses/2100";
+            //    else if (check_input == 4540)
+            //        window.location.href = "/Courses/PastCourses/4540";
+            //    else if (check_input == 2420)
+            //        window.location.href = "/Courses/PastCourses/2420";
+            //    else {
+            //        alert("No such this course");
+
         }).fail(function (jqXHR, textStatus, errorThrown) {
             console.log("failed: ");
             console.log(jqXHR);

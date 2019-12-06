@@ -161,6 +161,7 @@ namespace CS4540_A2.Controllers
         }
 
         // GET: Courses/Details?cId=1
+        [Route("/Courses/Details/{cId:int}")]
         public async Task<IActionResult> Details(int cId)
         {
             var course = await _context.Courses.Where(m =>
