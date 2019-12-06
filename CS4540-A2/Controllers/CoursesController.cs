@@ -58,7 +58,7 @@ namespace CS4540_A2.Controllers
                     Year = x.Key.Year,
                     semester = x.Key.Semester,
                     Courses = x.ToList()
-                }).ToList(); 
+                }).ToList();
 
             Dictionary<Course, string> map = new Dictionary<Course, string>();
             foreach (Course c in Courses)
@@ -75,11 +75,11 @@ namespace CS4540_A2.Controllers
 
             Dictionary<Course, int> progressMap = new Dictionary<Course, int>();
 
-            foreach(Course c in Courses)
+            foreach (Course c in Courses)
             {
                 float max = c.LOS.Count * 4;
                 float total = 0;
-               foreach(LearningOutcome l in c.LOS)
+                foreach (LearningOutcome l in c.LOS)
                 {
                     var AssFile = _context.SyllabusFile.Where(e => e.LearningOutcomeLId == l.LId).FirstOrDefault();
                     var ExFile = _context.ExamplesFile.Where(e => e.LearningOutcomeLId == l.LId).ToList();
@@ -92,12 +92,12 @@ namespace CS4540_A2.Controllers
 
             Dictionary<CoursePerSemester, bool> progressCompletionMap = new Dictionary<CoursePerSemester, bool>();
 
-            foreach(CoursePerSemester c in CoursesPerSemester)
+            foreach (CoursePerSemester c in CoursesPerSemester)
             {
                 progressCompletionMap.Add(c, true);
                 foreach (var course in c.Courses)
                 {
-                    if(progressMap[course] != 100)
+                    if (progressMap[course] != 100)
                     {
                         progressCompletionMap[c] = false;
                     }
@@ -218,16 +218,29 @@ namespace CS4540_A2.Controllers
                 return NotFound();
             }
             var userEmail = await _userManager.GetEmailAsync(user);
+
+            var prevCourses = await _context.Courses.Where(o => o.Number == course.Number).ToListAsync();
+
+
             var courseEmail = course.Email;
             var professor = await _userManager.FindByEmailAsync(courseEmail);
+            var readOnly = false;
 
             // Instructor can't see other Courses that does not belong to him/her
             if (userEmail != courseEmail && (User.IsInRole("Instructor")))
             {
-                return View("../Shared/AccessDenied");
+                if (prevCourses.Where(o => o.Email == userEmail).Any())
+                {
+                    readOnly = true;
+                }
+                else
+                {
+                    return View("../Shared/AccessDenied");
+                }
             }
 
             course.LOS = LOS;
+            ViewData["ReadOnly"] = readOnly;
             ViewData["Course"] = course;
             ViewData["Professor"] = UserNameAndRolesUtil.UserNameToActualName(professor.UserName);
             if (User.IsInRole("DepartmentChair"))
@@ -282,6 +295,7 @@ namespace CS4540_A2.Controllers
 
             return View(course);
         }
+
         /* 
          *  Gets All the courses that belongs to such professor 
             Assumes ProfessorUserName is passed in as danny_kopta, which is the username.        

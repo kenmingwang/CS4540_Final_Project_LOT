@@ -169,7 +169,10 @@ $(function () {
                                        asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
                                        target="_blank">@LOS.Name Assignment @count </a>
                                 }
-                                <button class="btn btn-outline-dark btn-xs" onclick="Upload('Assignment','@LOS.LId')">Edit</button>
+                                @if (!(bool)ViewData["ReadOnly"])
+                                {
+                                    <button class="btn btn-outline-dark btn-xs" onclick="Upload('Assignment','@LOS.LId')">Edit</button>
+                                }
                             </td>
                             <td>
                                 @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][0] != -1)
@@ -211,7 +214,10 @@ $(function () {
                                        asp-route-id="@(LOS.LId)" asp-route-rate="bad"
                                        target="_blank">Poor</a>
                                 }
-                                <button class="btn btn-outline-dark btn-xs" onclick="UploadExample('@LOS.LId')">Edit</button>
+                                @if (!(bool)ViewData["ReadOnly"])
+                                {
+                                    <button class="btn btn-outline-dark btn-xs" onclick="UploadExample('@LOS.LId')">Edit</button>
+                                }
 
                             </td>
                         </tr>
