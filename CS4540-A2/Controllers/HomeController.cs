@@ -52,8 +52,9 @@ namespace CS4540_A2.Controllers
             {
 
                 names.Add(c.Dept + c.Number + " " + c.Name);
-                address.Add("/Courses/PastCourses/" + c.Number);
+                address.Add("/Courses/PastCourses?=" + c.Number);
             }
+
             //foreach (LearningOutcome l in lo)
             //{
 
@@ -72,6 +73,7 @@ namespace CS4540_A2.Controllers
             //    names.Add(c.LO.Course.Dept + c.LO.Course.Number + " " + c.LO.Course.Name);
             //    address.Add("/LearningOutcomes/Details/" + c.LO.Course.Number);
             //}
+
             return Json(new { success = true, names, address });
         }
     }

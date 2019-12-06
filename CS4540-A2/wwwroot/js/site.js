@@ -15,17 +15,17 @@ function search_function() {
         }).done(function (res) {
             console.log("action taken: " + res);
             if (check_input == 4400)
-                window.location.href = "/Courses/PastCourses/4400";
+                window.location.href = "/Courses/PastCourses?number=4400";
             else if (check_input == 3500)
-                window.location.href = "/Courses/PastCourses/3500";
+                window.location.href = "/Courses/PastCourses?number=3500";
             else if (check_input == 3505)
-                window.location.href = "/Courses/PastCourses/3505";
+                window.location.href = "/Courses/PastCourses?number=3505";
             else if (check_input == 2100)
-                window.location.href = "/Courses/PastCourses/2100";
+                window.location.href = "/Courses/PastCourses?number=2100";
             else if (check_input == 4540)
-                window.location.href = "/Courses/PastCourses/4540";
+                window.location.href = "/Courses/PastCourses?number=4540";
             else if (check_input == 2420)
-                window.location.href = "/Courses/PastCourses/2420";
+                window.location.href = "/Courses/PastCourses?number=2420";
             else {
                 alert("No such this course");
             }
