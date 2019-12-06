@@ -90,8 +90,6 @@ namespace CS4540_A2.Models
             context.SaveChanges();
 
             #endregion
-
-
             #region LearningOutcomeSeed
             var LOS = new LearningOutcome[]
                 {
@@ -348,6 +346,154 @@ namespace CS4540_A2.Models
             }
             context.SaveChanges();
             #endregion
+
+            #region CourseSeed
+            var courses2 = new Course[]
+                {
+                new Course
+                {
+                    Name = "Web Development",
+                    Description = "Software architectures, programming models, and programming environments pertinent to developing web applications.  Topics include client-server model, multi-tier software architecture, client-side scripting (JavaScript), server-side programming (Servlets and JavaServer Pages), component reuse (JavaBeans), database connectivity (JDBC), and web servers.",
+                    Dept = "CS",
+                    Number = 4540,
+                    Semester = "FA",
+                    Year = 2018,
+                    Email = "professor_jim@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Algorithms",
+                    Description = "This course provides an introduction to the problem of engineering computational efficiency into programs.Students will learn about classical algorithms(including sorting, searching, and graph traversal),data structures(including stacks, queues, linked lists, trees, hash tables, and graphs),and analysis of program space and time requirements.Students will complete extensive programming exercises that require the application of elementary techniques from software engineering.",
+                    Dept = "CS",
+                    Number = 2420,
+                    Semester = "FA",
+                    Year = 2018,
+                    Email = "professor_jim@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Software Practice I",
+                    Description = "Practical exposure to the process of creating large software systems, including requirements specifications, design, implementation, testing, and maintenance. Emphasis on software process, software tools (debuggers, profilers, source code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, source code management, object-oriented analysis and design), and team development practice. Much of the work will be in groups and will involve modifying preexisting software systems.",
+                    Dept = "CS",
+                    Number = 3500,
+                    Semester = "FA",
+                    Year = 2018,
+                    Email = "professor_jim@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Discrete Structures",
+                    Description = "Introduction to propositional logic, predicate logic, formal logical arguments, finite sets, functions, relations, inductive proofs, recurrence relations, graphs, probability, and their applications to Computer Science.",
+                    Dept = "CS",
+                    Number = 2100,
+                    Semester = "FA",
+                    Year = 2018,
+                    Email = "professor_mary@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Computer Systems",
+                    Description = "Introduction to computer systems from a programmer's point of view.  Machine level representations of programs, optimizing program performance, memory hierarchy, linking, exceptional control flow, measuring program performance, virtual memory, concurrent programming with threads, network programming.",
+                    Dept = "CS",
+                    Number = 4400,
+                    Semester = "FA",
+                    Year = 2018,
+                    Email = "professor_mary@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Software Practice I",
+                    Description = "Practical exposure to the process of creating large software systems, including requirements specifications, design, implementation, testing, and maintenance. Emphasis on software process, software tools (debuggers, profilers, source code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, source code management, object-oriented analysis and design), and team development practice. Much of the work will be in groups and will involve modifying preexisting software systems.",
+                    Dept = "CS",
+                    Number = 3500,
+                    Semester = "FA",
+                    Year = 2018,
+                    Email = "professor_danny@cs.utah.edu"
+                }};
+
+            foreach (Course c in courses2)
+            {
+                context.Courses.Add(c);
+            }
+            context.SaveChanges();
+
+            #endregion
+
+            #region CourseSeed
+            var courses3 = new Course[]
+                {
+                new Course
+                {
+                    Name = "Web Development",
+                    Description = "Software architectures, programming models, and programming environments pertinent to developing web applications.  Topics include client-server model, multi-tier software architecture, client-side scripting (JavaScript), server-side programming (Servlets and JavaServer Pages), component reuse (JavaBeans), database connectivity (JDBC), and web servers.",
+                    Dept = "CS",
+                    Number = 4540,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_jim@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Algorithms",
+                    Description = "This course provides an introduction to the problem of engineering computational efficiency into programs.Students will learn about classical algorithms(including sorting, searching, and graph traversal),data structures(including stacks, queues, linked lists, trees, hash tables, and graphs),and analysis of program space and time requirements.Students will complete extensive programming exercises that require the application of elementary techniques from software engineering.",
+                    Dept = "CS",
+                    Number = 2420,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_jim@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Software Practice I",
+                    Description = "Practical exposure to the process of creating large software systems, including requirements specifications, design, implementation, testing, and maintenance. Emphasis on software process, software tools (debuggers, profilers, source code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, source code management, object-oriented analysis and design), and team development practice. Much of the work will be in groups and will involve modifying preexisting software systems.",
+                    Dept = "CS",
+                    Number = 3500,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_jim@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Discrete Structures",
+                    Description = "Introduction to propositional logic, predicate logic, formal logical arguments, finite sets, functions, relations, inductive proofs, recurrence relations, graphs, probability, and their applications to Computer Science.",
+                    Dept = "CS",
+                    Number = 2100,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_mary@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Computer Systems",
+                    Description = "Introduction to computer systems from a programmer's point of view.  Machine level representations of programs, optimizing program performance, memory hierarchy, linking, exceptional control flow, measuring program performance, virtual memory, concurrent programming with threads, network programming.",
+                    Dept = "CS",
+                    Number = 4400,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_mary@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Software Practice I",
+                    Description = "Practical exposure to the process of creating large software systems, including requirements specifications, design, implementation, testing, and maintenance. Emphasis on software process, software tools (debuggers, profilers, source code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, source code management, object-oriented analysis and design), and team development practice. Much of the work will be in groups and will involve modifying preexisting software systems.",
+                    Dept = "CS",
+                    Number = 3500,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_danny@cs.utah.edu"
+                }};
+
+            foreach (Course c in courses3)
+            {
+                context.Courses.Add(c);
+            }
+            context.SaveChanges();
+
+            #endregion
+
+
+
+
 
             #region CourseNote
             CourseNote note = new CourseNote()
