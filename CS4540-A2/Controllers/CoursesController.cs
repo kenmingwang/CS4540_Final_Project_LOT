@@ -301,7 +301,7 @@ namespace CS4540_A2.Controllers
             // Get courses links to the email
             var courses = await _context.Courses
                 .Where(m =>
-               m.Email == professorEmail).OrderBy(course => course.Number).ToListAsync();
+               m.Email == professorEmail).OrderByDescending(course => course.Year).ToListAsync();
 
             if (courses == null)
             {
@@ -348,6 +348,24 @@ namespace CS4540_A2.Controllers
             }
             ViewData["AssignmentMap"] = LOSFileIDMap;
             ViewData["ExampleMap"] = ExampleIDMap;
+
+            Dictionary<Course, int> progressMap = new Dictionary<Course, int>();
+
+            foreach (Course c in courses)
+            {
+                float max = c.LOS.Count * 4;
+                float total = 0;
+                foreach (LearningOutcome l in c.LOS)
+                {
+                    var AssFile = _context.SyllabusFile.Where(e => e.LearningOutcomeLId == l.LId).FirstOrDefault();
+                    var ExFile = _context.ExamplesFile.Where(e => e.LearningOutcomeLId == l.LId).ToList();
+                    if (AssFile != null)
+                        total += 1;
+                    total += ExFile.Count;
+                }
+                progressMap.Add(c, (int)Math.Round((total / max) * 100));
+            }
+            ViewData["ProgressMap"] = progressMap;
 
             return View(courses);
         }
