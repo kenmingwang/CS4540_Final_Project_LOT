@@ -49,6 +49,23 @@ namespace CS4540_A2.Models
         public Course Course { get; set; }
     }
 
+    public class CourseFeedback
+    {
+        [Key]
+        public int fId { get; set; }
+        [Required]
+        public int cId { get; set; }
+        public Course Course { get; set; }
+        public double AvgCourseEffectiveRate { get; set; }
+        public double AvgCourseOrganizedRate { get; set; }
+        public double AvgCourseObjMetRate { get; set; }
+        public double AvgCourseOverallRate { get; set; }
+        public List<Feedback> CourseEffectiveRate { get; set; }
+        public List<Feedback> CourseOrganizedRate { get; set; }
+        public List<Feedback> CourseObjMetRate { get; set; }
+        public List<Feedback> CourseOverallRate { get; set; }
+    }
+
     public class Feedback
     {
         [Key]

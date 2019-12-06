@@ -69,7 +69,15 @@ $(function () {
                 @Html.DisplayFor(model => model.Number) -
                 @Html.DisplayFor(model => model.Semester) -
                 @Html.DisplayFor(model => model.Year)
-            </span> <span class="badge badge-pill badge-warning">Incomplete</span>
+            </span>
+            @if ((int)ViewData["Completion"] == 100)
+            {
+                <span class="badge badge-pill badge-success">Completed</span>
+            }
+            else
+            {
+                <span class="badge badge-pill badge-warning">Incomplete</span>
+            }
         </button>
         <div class="mb-1 card">
             <div class="card-body">

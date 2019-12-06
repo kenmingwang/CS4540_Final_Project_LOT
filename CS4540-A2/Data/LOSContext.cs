@@ -22,6 +22,7 @@ namespace CS4540_A2.Data
         public DbSet<AssignmentFile> SyllabusFile {get;set;}
         public DbSet<ExamplesFile> ExamplesFile { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<CourseFeedback> CourseFeedbacks { get; set; }
     }
    
 }

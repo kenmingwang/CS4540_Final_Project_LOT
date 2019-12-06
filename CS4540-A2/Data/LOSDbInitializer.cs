@@ -90,8 +90,6 @@ namespace CS4540_A2.Models
             context.SaveChanges();
 
             #endregion
-
-
             #region LearningOutcomeSeed
             var LOS = new LearningOutcome[]
                 {
@@ -349,6 +347,159 @@ namespace CS4540_A2.Models
             context.SaveChanges();
             #endregion
 
+            #region CourseSeed
+            var courses2 = new Course[]
+            {
+                new Course
+                {
+                    Name = "Web Development",
+                    Description = "Software architectures, programming models, and programming environments pertinent to developing web applications.  Topics include client-server model, multi-tier software architecture, client-side scripting (JavaScript), server-side programming (Servlets and JavaServer Pages), component reuse (JavaBeans), database connectivity (JDBC), and web servers.",
+                    Dept = "CS",
+                    Number = 4540,
+                    Semester = "FA",
+                    Year = 2018,
+                    Email = "professor_jim@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Algorithms",
+                    Description = "This course provides an introduction to the problem of engineering computational efficiency into programs.Students will learn about classical algorithms(including sorting, searching, and graph traversal),data structures(including stacks, queues, linked lists, trees, hash tables, and graphs),and analysis of program space and time requirements.Students will complete extensive programming exercises that require the application of elementary techniques from software engineering.",
+                    Dept = "CS",
+                    Number = 2420,
+                    Semester = "FA",
+                    Year = 2018,
+                    Email = "professor_jim@cs.utah.edu"
+                }
+            };
+
+            foreach (Course c in courses2)
+            {
+                context.Courses.Add(c);
+            }
+            context.SaveChanges();
+
+            #endregion
+
+            #region LearningOutcomeSeed
+            var LOS2 = new LearningOutcome[]
+                {
+            #region CS4540
+            new LearningOutcome()
+            {
+                CourseCId = 7,
+                Name = "HTML CSS",
+                Description = "Construct web pages using modern HTML and CSS practices, including modern frameworks"
+            },
+                new LearningOutcome()
+                {
+                    CourseCId = 7,
+                    Name = "Create accessible web pages",
+                    Description = "Define accessibility and utilize techniques to create accessible web pages"
+                },
+                new LearningOutcome()
+                {
+                    CourseCId = 7,
+                    Name = "web-crawler",
+                    Description = "Construct a simple web-crawler for validation of page functionality and data scraping."
+                },
+            #endregion
+            #region CS2420
+                new LearningOutcome()
+                {
+                    CourseCId = 8,
+                    Name = "Data Structures",
+                    Description = "Implement, and analyze for efficiency, fundamental data structures (including lists, graphs, and trees) and algorithms (including searching, sorting, and hashing)"
+                },
+                new LearningOutcome()
+                {
+                    CourseCId = 8,
+                    Name = "Pair Programming",
+                    Description = "Appreciate the collaborative nature of computer science by discussing the benefits of pair programming"
+                } };
+            #endregion
+            foreach (LearningOutcome l in LOS2)
+            {
+                context.LOS.Add(l);
+            }
+            context.SaveChanges();
+            #endregion
+
+            #region CourseSeed
+            var courses3 = new Course[]
+                {
+                new Course
+                {
+                    Name = "Web Development",
+                    Description = "Software architectures, programming models, and programming environments pertinent to developing web applications.  Topics include client-server model, multi-tier software architecture, client-side scripting (JavaScript), server-side programming (Servlets and JavaServer Pages), component reuse (JavaBeans), database connectivity (JDBC), and web servers.",
+                    Dept = "CS",
+                    Number = 4540,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_jim@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Algorithms",
+                    Description = "This course provides an introduction to the problem of engineering computational efficiency into programs.Students will learn about classical algorithms(including sorting, searching, and graph traversal),data structures(including stacks, queues, linked lists, trees, hash tables, and graphs),and analysis of program space and time requirements.Students will complete extensive programming exercises that require the application of elementary techniques from software engineering.",
+                    Dept = "CS",
+                    Number = 2420,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_jim@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Software Practice I",
+                    Description = "Practical exposure to the process of creating large software systems, including requirements specifications, design, implementation, testing, and maintenance. Emphasis on software process, software tools (debuggers, profilers, source code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, source code management, object-oriented analysis and design), and team development practice. Much of the work will be in groups and will involve modifying preexisting software systems.",
+                    Dept = "CS",
+                    Number = 3500,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_jim@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Discrete Structures",
+                    Description = "Introduction to propositional logic, predicate logic, formal logical arguments, finite sets, functions, relations, inductive proofs, recurrence relations, graphs, probability, and their applications to Computer Science.",
+                    Dept = "CS",
+                    Number = 2100,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_mary@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Computer Systems",
+                    Description = "Introduction to computer systems from a programmer's point of view.  Machine level representations of programs, optimizing program performance, memory hierarchy, linking, exceptional control flow, measuring program performance, virtual memory, concurrent programming with threads, network programming.",
+                    Dept = "CS",
+                    Number = 4400,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_mary@cs.utah.edu"
+                },
+                new Course
+                {
+                    Name = "Software Practice I",
+                    Description = "Practical exposure to the process of creating large software systems, including requirements specifications, design, implementation, testing, and maintenance. Emphasis on software process, software tools (debuggers, profilers, source code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, source code management, object-oriented analysis and design), and team development practice. Much of the work will be in groups and will involve modifying preexisting software systems.",
+                    Dept = "CS",
+                    Number = 3500,
+                    Semester = "SP",
+                    Year = 2019,
+                    Email = "professor_danny@cs.utah.edu"
+                }};
+
+            foreach (Course c in courses3)
+            {
+                context.Courses.Add(c);
+            }
+            context.SaveChanges();
+
+            #endregion
+
+
+
+
+
             #region CourseNote
             CourseNote note = new CourseNote()
             {
@@ -398,59 +549,119 @@ namespace CS4540_A2.Models
 
             #region FeedbackSeed
             var feedbacks = new Feedback[]
-                {
-                new Feedback
-                {
+            {
+                new Feedback {
                     cId = 1,
-                    CourseEffectiveRate = 5, // out of 5
-                    CourseOrganizedRate = 4, // out of 5
-                    CourseObjMetRate = 4, // out of 5
-                    CourseOverallRate = 4 // out of 5
-                },
-                new Feedback
-                {
-                    cId = 2,
-                    CourseEffectiveRate = 5, // out of 5
-                    CourseOrganizedRate = 4, // out of 5
-                    CourseObjMetRate = 4, // out of 5
-                    CourseOverallRate = 4 // out of 5
-                },
-                new Feedback
-                {
-                    cId = 3,
-                    CourseEffectiveRate = 5, // out of 5
-                    CourseOrganizedRate = 5, // out of 5
+                    CourseEffectiveRate = 4, // out of 5
+                    CourseOrganizedRate = 4.5, // out of 5
                     CourseObjMetRate = 5, // out of 5
-                    CourseOverallRate = 5 // out of 5
+                    CourseOverallRate = 4.5 // out of 5
                 },
-                new Feedback
-                {
+                new Feedback {
+                    cId = 2,
+                    CourseEffectiveRate = 3, // out of 5
+                    CourseOrganizedRate = 3.5, // out of 5
+                    CourseObjMetRate = 4, // out of 5
+                    CourseOverallRate = 4 // out of 5
+                },
+                new Feedback {
+                    cId = 3,
+                    CourseEffectiveRate = 4.5, // out of 5
+                    CourseOrganizedRate = 4.5, // out of 5
+                    CourseObjMetRate = 4.5, // out of 5
+                    CourseOverallRate = 4.5 // out of 5
+                },
+                new Feedback {
                     cId = 4,
                     CourseEffectiveRate = 3, // out of 5
-                    CourseOrganizedRate = 4, // out of 5
+                    CourseOrganizedRate = 3.5, // out of 5
                     CourseObjMetRate = 4, // out of 5
-                    CourseOverallRate = 4 // out of 5
+                    CourseOverallRate = 3.5 // out of 5
                 },
-                new Feedback
-                {
+                new Feedback {
                     cId = 5,
-                    CourseEffectiveRate = 1, // out of 5
-                    CourseOrganizedRate = 3, // out of 5
-                    CourseObjMetRate = 2, // out of 5
-                    CourseOverallRate = 2 // out of 5
+                    CourseEffectiveRate = 5, // out of 5
+                    CourseOrganizedRate = 4.5, // out of 5
+                    CourseObjMetRate = 5, // out of 5
+                    CourseOverallRate = 4.5 // out of 5
                 },
-                new Feedback
-                {
+                new Feedback {
                     cId = 6,
-                    CourseEffectiveRate = 3, // out of 5
-                    CourseOrganizedRate = 4, // out of 5
+                    CourseEffectiveRate = 2, // out of 5
+                    CourseOrganizedRate = 3.5, // out of 5
                     CourseObjMetRate = 3, // out of 5
+                    CourseOverallRate = 3.5 // out of 5
+                },
+                new Feedback {
+                    cId = 5,
+                    CourseEffectiveRate = 0, // out of 5
+                    CourseOrganizedRate = 1, // out of 5
+                    CourseObjMetRate = 2, // out of 5
                     CourseOverallRate = 3 // out of 5
-                }};
-
+                }
+            };
             foreach (Feedback f in feedbacks)
             {
                 context.Feedbacks.Add(f);
+            }
+            context.SaveChanges();
+            #endregion
+
+            #region CourseFeedbackSeed
+            var courseFeedbacks = new CourseFeedback[]
+                {
+                new CourseFeedback
+                {
+                    cId = 1,
+                    CourseEffectiveRate = new List<Feedback> {feedbacks[0]},
+                    CourseOrganizedRate = new List<Feedback> {feedbacks[0] },
+                    CourseObjMetRate = new List<Feedback> {feedbacks[0]},
+                    CourseOverallRate = new List<Feedback> {feedbacks[0]}
+                },
+                new CourseFeedback
+                {
+                    cId = 2,
+                    CourseEffectiveRate = new List<Feedback> {feedbacks[1]},
+                    CourseOrganizedRate = new List<Feedback> {feedbacks[1] },
+                    CourseObjMetRate = new List<Feedback> {feedbacks[1]},
+                    CourseOverallRate = new List<Feedback> {feedbacks[1]}
+                },
+                new CourseFeedback
+                {
+                    cId = 3,
+                    CourseEffectiveRate = new List<Feedback> {feedbacks[2]},
+                    CourseOrganizedRate = new List<Feedback> {feedbacks[2] },
+                    CourseObjMetRate = new List<Feedback> {feedbacks[2]},
+                    CourseOverallRate = new List<Feedback> {feedbacks[2]}
+                },
+                new CourseFeedback
+                {
+                    cId = 4,
+                    CourseEffectiveRate = new List<Feedback> {feedbacks[3]},
+                    CourseOrganizedRate = new List<Feedback> {feedbacks[3]},
+                    CourseObjMetRate = new List<Feedback> {feedbacks[3]},
+                    CourseOverallRate = new List<Feedback> {feedbacks[3]}
+                },
+                new CourseFeedback
+                {
+                    cId = 5,
+                    CourseEffectiveRate = new List<Feedback> {feedbacks[4], feedbacks[6]},
+                    CourseOrganizedRate = new List<Feedback> {feedbacks[4], feedbacks[6]},
+                    CourseObjMetRate = new List<Feedback> {feedbacks[4], feedbacks[6]},
+                    CourseOverallRate = new List<Feedback> {feedbacks[4], feedbacks[6] }
+                },
+                new CourseFeedback
+                {
+                    cId = 6,
+                    CourseEffectiveRate = new List<Feedback> {feedbacks[5]},
+                    CourseOrganizedRate = new List<Feedback> {feedbacks[5] },
+                    CourseObjMetRate = new List<Feedback> {feedbacks[5]},
+                    CourseOverallRate = new List<Feedback> {feedbacks[5]}
+                }};
+
+            foreach (CourseFeedback cf in courseFeedbacks)
+            {
+                context.CourseFeedbacks.Add(cf);
             }
             context.SaveChanges();
 

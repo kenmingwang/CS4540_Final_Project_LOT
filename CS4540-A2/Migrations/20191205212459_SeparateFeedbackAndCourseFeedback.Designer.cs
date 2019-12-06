@@ -4,14 +4,16 @@ using CS4540_A2.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CS4540A2.Migrations
+namespace CS4540A2.Migrations.LOS
 {
     [DbContext(typeof(LOSContext))]
-    partial class LOSContextModelSnapshot : ModelSnapshot
+    [Migration("20191205212459_SeparateFeedbackAndCourseFeedback")]
+    partial class SeparateFeedbackAndCourseFeedback
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
