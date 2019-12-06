@@ -415,6 +415,10 @@ namespace CS4540_A2.Controllers
 
             return View(courses);
         }
+
+       /* 
+        *  Ajax call to this API to submit a note, via the NoteData body       
+        */
         public async Task<IActionResult> onPostSubmitNoteAsync([FromBody] NoteData request)
         {
             int currentYear = DateTime.Now.Year;
@@ -461,6 +465,9 @@ namespace CS4540_A2.Controllers
 
         }
 
+        /* 
+         *  Ajax call to this API to approve a note, via the Course note id       
+         */
         public async Task<IActionResult> onPostApproveNoteAsync(int CNId)
         {
 
@@ -481,6 +488,9 @@ namespace CS4540_A2.Controllers
             return StatusCode(200);
         }
 
+        /* 
+         *  Ajax call to this API to post a LOS note, via the NoteData body 
+         */
         public async Task<IActionResult> onPostLOSNoteAsync([FromBody] NoteData request)
         {
             int currentYear = DateTime.Now.Year;
@@ -520,6 +530,11 @@ namespace CS4540_A2.Controllers
             return StatusCode(200);
         }
 
+
+        /* 
+         *  Ajax call to this API to upload a syllabus file, the files 
+         *  permitted are at the top of the file
+         */
         public async Task<IActionResult> OnPostUploadAsync()
         {
 
@@ -556,6 +571,10 @@ namespace CS4540_A2.Controllers
             return StatusCode(200);
         }
 
+        /* 
+         *  Ajax call to this API to upload a example file, the files 
+         *  permitted are at the top of the file
+         */
         public async Task<IActionResult> OnPostUploadExampleAsync()
         {
             var file = Request.Form.Files[0];
@@ -595,6 +614,10 @@ namespace CS4540_A2.Controllers
             return StatusCode(200);
         }
 
+        /* 
+         *  Gets All the courses that belongs to such number 
+            Similiar to details professor     
+         */
         public async Task<IActionResult> PastCourses(int number)
         {
             // Get courses links to the email
