@@ -9,6 +9,7 @@
     List<CoursePerSemester> courses = ViewData["CoursesPerSemester"] as List<CoursePerSemester>;
     Dictionary<Course, string> map = ViewData["CoursesMap"] as Dictionary<Course, string>;
     Dictionary<Course, int> progressMap = ViewData["ProgressMap"] as Dictionary<Course, int>;
+    Dictionary<CoursePerSemester, bool> progressCompletionMap =  ViewData["CourseCompletionPerSemester"] as Dictionary<CoursePerSemester, bool>;
 
     int cardCounter = 0;
     int progressCounter = 0;
@@ -26,7 +27,14 @@
             <button id="heading_@(cardCounter)" class="card-header btn btn-lg " data-toggle="collapse"
                     data-target="#collapse_@(cardCounter)" aria-expanded="true" aria-controls="collapse_@(cardCounter)">
                 <span class="table-header-color">Computer-Science-@coursePS.Year-@coursePS.semester</span>
-                <span class="badge badge-pill badge-warning">In Progress</span>
+                @if (progressCompletionMap[coursePS])
+                {
+                    <span class="badge badge-pill badge-success">Completed</span>
+                }
+                else
+                {
+                    <span class="badge badge-pill badge-warning">In Progress</span>
+                }
             </button>
 
             <div id="collapse_@(cardCounter)" class="collapse hide" aria-labelledby="heading_@(cardCounter)" data-parent="#accordion">

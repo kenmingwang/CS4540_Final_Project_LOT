@@ -349,7 +349,7 @@ namespace CS4540_A2.Models
 
             #region CourseSeed
             var courses2 = new Course[]
-                {
+            {
                 new Course
                 {
                     Name = "Web Development",
@@ -369,47 +369,8 @@ namespace CS4540_A2.Models
                     Semester = "FA",
                     Year = 2018,
                     Email = "professor_jim@cs.utah.edu"
-                },
-                new Course
-                {
-                    Name = "Software Practice I",
-                    Description = "Practical exposure to the process of creating large software systems, including requirements specifications, design, implementation, testing, and maintenance. Emphasis on software process, software tools (debuggers, profilers, source code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, source code management, object-oriented analysis and design), and team development practice. Much of the work will be in groups and will involve modifying preexisting software systems.",
-                    Dept = "CS",
-                    Number = 3500,
-                    Semester = "FA",
-                    Year = 2018,
-                    Email = "professor_jim@cs.utah.edu"
-                },
-                new Course
-                {
-                    Name = "Discrete Structures",
-                    Description = "Introduction to propositional logic, predicate logic, formal logical arguments, finite sets, functions, relations, inductive proofs, recurrence relations, graphs, probability, and their applications to Computer Science.",
-                    Dept = "CS",
-                    Number = 2100,
-                    Semester = "FA",
-                    Year = 2018,
-                    Email = "professor_mary@cs.utah.edu"
-                },
-                new Course
-                {
-                    Name = "Computer Systems",
-                    Description = "Introduction to computer systems from a programmer's point of view.  Machine level representations of programs, optimizing program performance, memory hierarchy, linking, exceptional control flow, measuring program performance, virtual memory, concurrent programming with threads, network programming.",
-                    Dept = "CS",
-                    Number = 4400,
-                    Semester = "FA",
-                    Year = 2018,
-                    Email = "professor_mary@cs.utah.edu"
-                },
-                new Course
-                {
-                    Name = "Software Practice I",
-                    Description = "Practical exposure to the process of creating large software systems, including requirements specifications, design, implementation, testing, and maintenance. Emphasis on software process, software tools (debuggers, profilers, source code repositories, test harnesses), software engineering techniques (time management, code, and documentation standards, source code management, object-oriented analysis and design), and team development practice. Much of the work will be in groups and will involve modifying preexisting software systems.",
-                    Dept = "CS",
-                    Number = 3500,
-                    Semester = "FA",
-                    Year = 2018,
-                    Email = "professor_danny@cs.utah.edu"
-                }};
+                }
+            };
 
             foreach (Course c in courses2)
             {
@@ -417,6 +378,50 @@ namespace CS4540_A2.Models
             }
             context.SaveChanges();
 
+            #endregion
+
+            #region LearningOutcomeSeed
+            var LOS2 = new LearningOutcome[]
+                {
+            #region CS4540
+            new LearningOutcome()
+            {
+                CourseCId = 7,
+                Name = "HTML CSS",
+                Description = "Construct web pages using modern HTML and CSS practices, including modern frameworks"
+            },
+                new LearningOutcome()
+                {
+                    CourseCId = 7,
+                    Name = "Create accessible web pages",
+                    Description = "Define accessibility and utilize techniques to create accessible web pages"
+                },
+                new LearningOutcome()
+                {
+                    CourseCId = 7,
+                    Name = "web-crawler",
+                    Description = "Construct a simple web-crawler for validation of page functionality and data scraping."
+                },
+            #endregion
+            #region CS2420
+                new LearningOutcome()
+                {
+                    CourseCId = 8,
+                    Name = "Data Structures",
+                    Description = "Implement, and analyze for efficiency, fundamental data structures (including lists, graphs, and trees) and algorithms (including searching, sorting, and hashing)"
+                },
+                new LearningOutcome()
+                {
+                    CourseCId = 8,
+                    Name = "Pair Programming",
+                    Description = "Appreciate the collaborative nature of computer science by discussing the benefits of pair programming"
+                } };
+            #endregion
+            foreach (LearningOutcome l in LOS2)
+            {
+                context.LOS.Add(l);
+            }
+            context.SaveChanges();
             #endregion
 
             #region CourseSeed

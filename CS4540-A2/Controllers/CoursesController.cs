@@ -74,6 +74,7 @@ namespace CS4540_A2.Controllers
             }
 
             Dictionary<Course, int> progressMap = new Dictionary<Course, int>();
+
             foreach(Course c in Courses)
             {
                 float max = c.LOS.Count * 4;
@@ -88,9 +89,25 @@ namespace CS4540_A2.Controllers
                 }
                 progressMap.Add(c, (int)Math.Round((total / max) * 100));
             }
+
+            Dictionary<CoursePerSemester, bool> progressCompletionMap = new Dictionary<CoursePerSemester, bool>();
+
+            foreach(CoursePerSemester c in CoursesPerSemester)
+            {
+                progressCompletionMap.Add(c, true);
+                foreach (var course in c.Courses)
+                {
+                    if(progressMap[course] != 100)
+                    {
+                        progressCompletionMap[c] = false;
+                    }
+                }
+            }
+
             ViewData["ProgressMap"] = progressMap;
             ViewData["CoursesMap"] = map;
             ViewData["CoursesPerSemester"] = CoursesPerSemester;
+            ViewData["CourseCompletionPerSemester"] = progressCompletionMap;
             return View();
             // return View(await _context.Courses.ToListAsync());
         }
