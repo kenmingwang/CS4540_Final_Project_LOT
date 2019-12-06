@@ -488,6 +488,7 @@ namespace CS4540_A2.Controllers
             return StatusCode(200);
         }
 
+        [Route("/Courses/PastCourses/{course_name:int}")]
         public async Task<IActionResult> PastCourses(int course_name)
         {
             var courses = await _context.Courses
