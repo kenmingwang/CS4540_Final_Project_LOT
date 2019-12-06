@@ -358,7 +358,7 @@ namespace CS4540_A2.Models
                     Number = 4540,
                     Semester = "FA",
                     Year = 2018,
-                    Email = "professor_jim@cs.utah.edu"
+                    Email = "professor_danny@cs.utah.edu"
                 },
                 new Course
                 {
@@ -435,7 +435,7 @@ namespace CS4540_A2.Models
                     Number = 4540,
                     Semester = "SP",
                     Year = 2019,
-                    Email = "professor_jim@cs.utah.edu"
+                    Email = "professor_mary@cs.utah.edu"
                 },
                 new Course
                 {

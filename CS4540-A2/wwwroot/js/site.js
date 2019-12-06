@@ -11,9 +11,9 @@ function search_function() {
                 text: check_input
             },
 
-          //  method: e.srcElement.method
+            //  method: e.srcElement.method
 
-        }).done(function (res) {
+        }).done(function(res) {
             window.location.href = res.add;
             //    console.log("action taken: " + res);
             //    if (check_input == 4400)
@@ -31,7 +31,7 @@ function search_function() {
             //    else {
             //        alert("No such this course");
 
-        }).fail(function (jqXHR, textStatus, errorThrown) {
+        }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log("failed: ");
             console.log(jqXHR);
             console.log(textStatus);
@@ -44,14 +44,14 @@ function search_function() {
 }
 $.ajax({
     url: "/Home/Update"
-}).done(function (res) {
+}).done(function(res) {
     names = res.names;
     address = res.address;
 
 });
 $('#search-button').autoComplete({
     minChars: 1,
-    source: function (item, hint) {
+    source: function(item, hint) {
         item = item.toUpperCase();
         var c = names;
         var match = [];
@@ -61,16 +61,16 @@ $('#search-button').autoComplete({
         match.sort();
         hint(match);
     },
-    onSelect: function (e, term, item) {
+    onSelect: function(e, term, item) {
         $.ajax({
 
 
-        }).done(function (res) {
+        }).done(function(res) {
             console.log("action take: " + res);
            window.location.href = address[names.indexOf(term)];
 
 
-        }).fail(function (jqXHR, textStatus, errorThrown) {
+        }).fail(function(jqXHR, textStatus, errorThrown) {
             console.log("failed: ");
             console.log(jqXHR);
             console.log(textStatus);
