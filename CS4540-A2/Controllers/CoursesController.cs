@@ -583,13 +583,16 @@ namespace CS4540_A2.Controllers
                 .Where(m =>
                m.Number == number).OrderByDescending(course => course.Year).ToListAsync();
 
-            var coursesSortByOverall = await _context.Courses
-                .Where(m =>
-               m.Number == number).OrderByDescending(course => course.Year).ToListAsync();
 
             if (courses == null)
             {
                 return NotFound();
+            }
+
+            List<Course> effRateSort = new List<Course>();
+            foreach (Course c in courses)
+            {
+                var co = _context.Feedbacks.Where(f => f.cId == c.CId).ToList();
             }
 
             List<LearningOutcome> LOSS = new List<LearningOutcome>();
@@ -650,6 +653,43 @@ namespace CS4540_A2.Controllers
             }
             ViewData["ProgressMap"] = progressMap;
 
+            List<KeyValuePair<Course, int>> EffRateMap = new List<KeyValuePair<Course, int>>();
+            List<KeyValuePair<Course, int>> OrgRateMap = new List<KeyValuePair<Course, int>>();
+            List<KeyValuePair<Course, int>> ObjRateMap = new List<KeyValuePair<Course, int>>();
+            List<KeyValuePair<Course, int>> OverallRateMap = new List<KeyValuePair<Course, int>>();
+            foreach (Course c in courses)
+            {
+                var feedbacks = _context.Feedbacks.Where(f => f.cId == c.CId).ToList();
+                double eff = 0;
+                double org = 0;
+                double obj = 0;
+                double overall = 0;
+                foreach (Feedback f in feedbacks)
+                {
+                    eff += f.CourseEffectiveRate;
+                    org += f.CourseOrganizedRate;
+                    obj += f.CourseObjMetRate;
+                    overall += f.CourseOverallRate;
+                }
+
+                double max = feedbacks.Count * 5;
+                if (max == 0)
+                    max = 1;
+
+                EffRateMap.Add(new KeyValuePair<Course, int>(c, (int)Math.Round((eff / max) * 100)));
+                OrgRateMap.Add(new KeyValuePair<Course, int>(c, (int)Math.Round((org / max) * 100)));
+                ObjRateMap.Add(new KeyValuePair<Course, int>(c, (int)Math.Round((obj / max) * 100)));
+                OverallRateMap.Add(new KeyValuePair<Course, int>(c, (int)Math.Round((overall / max) * 100)));
+            }
+            EffRateMap.Sort((p1, p2) => p2.Value.CompareTo(p1.Value));
+            OrgRateMap.Sort((p1, p2) => p2.Value.CompareTo(p1.Value));
+            ObjRateMap.Sort((p1, p2) => p2.Value.CompareTo(p1.Value));
+            OverallRateMap.Sort((p1, p2) => p2.Value.CompareTo(p1.Value));
+
+            ViewData["EffRateMap"] = EffRateMap;
+            ViewData["OrgRateMap"] = OrgRateMap;
+            ViewData["ObjRateMap"] = ObjRateMap;
+            ViewData["OverallRateMap"] = OverallRateMap;
             return View(courses);
         }
     }

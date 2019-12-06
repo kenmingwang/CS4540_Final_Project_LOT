@@ -10,27 +10,37 @@
     Dictionary<Course, string[]> professorName = ViewData["Professor"] as Dictionary<Course, string[]>;
     Dictionary<int, int[]> ExampleMap = ViewData["ExampleMap"] as Dictionary<int, int[]>;
     Dictionary<Course, int> progressMap = ViewData["ProgressMap"] as Dictionary<Course, int>;
+    List<KeyValuePair<Course, int>> EffRateMap = ViewData["EffRateMap"] as List<KeyValuePair<Course, int>>;
+    List<KeyValuePair<Course, int>> OrgRateMap = ViewData["OrgRateMap"] as List<KeyValuePair<Course, int>>;
+    List<KeyValuePair<Course, int>> ObjRateMap = ViewData["ObjRateMap"] as List<KeyValuePair<Course, int>>;
+    List<KeyValuePair<Course, int>> OverallRateMap = ViewData["OverallRateMap"] as List<KeyValuePair<Course, int>>;
 
     var Ccount = 1;
 }
 
-    <div>
-        <h1 class="display-4">Past courses for CS @Courses[0].Number</h1>
-    </div>
+<div>
+    <h1 class="display-4">Past courses for CS @Courses[0].Number</h1>
+</div>
+<div class="tab">
+    <button class="tablinks" onclick="openCity(event, 'accordion3')">Course Overall Rate</button>
+    <button class="tablinks" onclick="openCity(event, 'accordion1')">Course Organized Rate</button>
+    <button class="tablinks" onclick="openCity(event, 'accordion2')">Course Obj MetRate</button>
+    <button class="tablinks" onclick="openCity(event, 'accordion')">Course Effective Rate</button>
 
-<div id="accordion">
-    @foreach (Course c in Courses)
+</div>
+<div id="accordion" class="tabcontent">
+    @foreach (var c in EffRateMap)
     {
         <div class="card">
             <button id="heading@(Ccount)" + class="card-header btn btn-lg " data-toggle="collapse" data-target="#collapse@(Ccount)" aria-expanded="true" aria-controls="collapse@(Ccount)">
                 <span class="table-header-color">
-                    @Html.DisplayFor(modelItem => c.Dept) -
-                    @Html.DisplayFor(modelItem => c.Number) -
-                    @Html.DisplayFor(modelItem => c.Semester) -
-                    @Html.DisplayFor(modelItem => c.Year) -
-                    @Html.DisplayFor(modelItem => c.Name)
+                    @Html.DisplayFor(modelItem => c.Key.Dept) -
+                    @Html.DisplayFor(modelItem => c.Key.Number) -
+                    @Html.DisplayFor(modelItem => c.Key.Semester) -
+                    @Html.DisplayFor(modelItem => c.Key.Year) -
+                    @Html.DisplayFor(modelItem => c.Key.Name)
                 </span>
-                @if (progressMap[c] != 100)
+                @if (progressMap[c.Key] != 100)
                 {
                     <span class="badge badge-pill badge-warning">Incomplete</span>
                 }
@@ -38,12 +48,16 @@
                 {
                     <span class="badge badge-pill badge-success">Completed</span>
                 }
-
+                <div class="star-ratings-sprite center">
+                    <span style="width: @(EffRateMap.Where(e => e.Key == c.Key).FirstOrDefault().Value)%"
+                          class="star-ratings-sprite-rating">
+                    </span>
+                </div>
             </button>
 
 
             <div id="collapse@(Ccount)" class="collapse hide" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
-                <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.CId" target="_blank"
+                <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.Key.CId" target="_blank"
                    class=" btn btn-secondary w-100">
                     Click to see Details of this course
                 </a>
@@ -62,7 +76,358 @@
                     <tbody>
                         <tr>
                         </tr>
-                        @foreach (LearningOutcome LOS in c.LOS)
+                        @foreach (LearningOutcome LOS in c.Key.LOS)
+                        {
+                            <tr>
+                                <td>@LOS.Name</td>
+                                <td>
+                                    @if (AssignmentMap.ContainsKey(LOS.LId))
+                                    {
+                                        <a asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                           target="_blank">@LOS.Name Assignment</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Ass@(LOS.LId)" class="isDisabled" asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                           target="_blank">@LOS.Name Assignment</a>
+                                    }
+                                </td>
+                                <td>
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][0] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                           target="_blank">Good</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Exgood_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                           target="_blank">Good</a>
+                                    }
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][1] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                           target="_blank">Average</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Exaverage_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                           target="_blank">Average</a>
+                                    }
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][2] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                           target="_blank">Poor</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Expoor_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                           target="_blank">Poor</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        Ccount += 1;
+    }
+
+
+</div>
+<div id="accordion1" class="tabcontent">
+    @foreach (var c in OrgRateMap)
+    {
+        <div class="card">
+            <button id="heading@(Ccount)" + class="card-header btn btn-lg " data-toggle="collapse" data-target="#collapse@(Ccount)" aria-expanded="true" aria-controls="collapse@(Ccount)">
+                <span class="table-header-color">
+                    @Html.DisplayFor(modelItem => c.Key.Dept) -
+                    @Html.DisplayFor(modelItem => c.Key.Number) -
+                    @Html.DisplayFor(modelItem => c.Key.Semester) -
+                    @Html.DisplayFor(modelItem => c.Key.Year) -
+                    @Html.DisplayFor(modelItem => c.Key.Name)
+                </span>
+                @if (progressMap[c.Key] != 100)
+                {
+                    <span class="badge badge-pill badge-warning">Incomplete</span>
+                }
+                else
+                {
+                    <span class="badge badge-pill badge-success">Completed</span>
+                }
+                <div class="star-ratings-sprite center">
+                    <span style="width: @(OrgRateMap.Where(e => e.Key == c.Key).FirstOrDefault().Value)%"
+                          class="star-ratings-sprite-rating">
+                    </span>
+                </div>
+            </button>
+
+
+            <div id="collapse@(Ccount)" class="collapse hide" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
+                <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.Key.CId" target="_blank"
+                   class=" btn btn-secondary w-100">
+                    Click to see Details of this course
+                </a>
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Learning Outcome</th>
+                            <th scope="col">
+                                Evaluation Metric
+                            </th>
+                            <th scope="col">
+                                Examples
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        </tr>
+                        @foreach (LearningOutcome LOS in c.Key.LOS)
+                        {
+                            <tr>
+                                <td>@LOS.Name</td>
+                                <td>
+                                    @if (AssignmentMap.ContainsKey(LOS.LId))
+                                    {
+                                        <a asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                           target="_blank">@LOS.Name Assignment</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Ass@(LOS.LId)" class="isDisabled" asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                           target="_blank">@LOS.Name Assignment</a>
+                                    }
+                                </td>
+                                <td>
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][0] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                           target="_blank">Good</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Exgood_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                           target="_blank">Good</a>
+                                    }
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][1] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                           target="_blank">Average</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Exaverage_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                           target="_blank">Average</a>
+                                    }
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][2] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                           target="_blank">Poor</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Expoor_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                           target="_blank">Poor</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        Ccount += 1;
+    }
+
+
+</div>
+<div id="accordion2" class="tabcontent">
+    @foreach (var c in ObjRateMap)
+    {
+        <div class="card">
+            <button id="heading@(Ccount)" + class="card-header btn btn-lg " data-toggle="collapse" data-target="#collapse@(Ccount)" aria-expanded="true" aria-controls="collapse@(Ccount)">
+                <span class="table-header-color">
+                    @Html.DisplayFor(modelItem => c.Key.Dept) -
+                    @Html.DisplayFor(modelItem => c.Key.Number) -
+                    @Html.DisplayFor(modelItem => c.Key.Semester) -
+                    @Html.DisplayFor(modelItem => c.Key.Year) -
+                    @Html.DisplayFor(modelItem => c.Key.Name)
+                </span>
+                @if (progressMap[c.Key] != 100)
+                {
+                    <span class="badge badge-pill badge-warning">Incomplete</span>
+                }
+                else
+                {
+                    <span class="badge badge-pill badge-success">Completed</span>
+                }
+                <div class="star-ratings-sprite center">
+                    <span style="width: @(ObjRateMap.Where(e => e.Key == c.Key).FirstOrDefault().Value)%"
+                          class="star-ratings-sprite-rating">
+                    </span>
+                </div>
+            </button>
+
+
+            <div id="collapse@(Ccount)" class="collapse hide" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
+                <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.Key.CId" target="_blank"
+                   class=" btn btn-secondary w-100">
+                    Click to see Details of this course
+                </a>
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Learning Outcome</th>
+                            <th scope="col">
+                                Evaluation Metric
+                            </th>
+                            <th scope="col">
+                                Examples
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        </tr>
+                        @foreach (LearningOutcome LOS in c.Key.LOS)
+                        {
+                            <tr>
+                                <td>@LOS.Name</td>
+                                <td>
+                                    @if (AssignmentMap.ContainsKey(LOS.LId))
+                                    {
+                                        <a asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                           target="_blank">@LOS.Name Assignment</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Ass@(LOS.LId)" class="isDisabled" asp-controller="Courses" asp-action="OnGetDownloadDbAsync" asp-route-id="@(LOS.LId)"
+                                           target="_blank">@LOS.Name Assignment</a>
+                                    }
+                                </td>
+                                <td>
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][0] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                           target="_blank">Good</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Exgood_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                           target="_blank">Good</a>
+                                    }
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][1] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                           target="_blank">Average</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Exaverage_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                           target="_blank">Average</a>
+                                    }
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][2] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                           target="_blank">Poor</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Expoor_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                           target="_blank">Poor</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        Ccount += 1;
+    }
+
+
+</div>
+<div id="accordion3" class="tabcontent">
+    @foreach (var c in OverallRateMap)
+    {
+        <div class="card">
+            <button id="heading@(Ccount)" + class="card-header btn btn-lg " data-toggle="collapse" data-target="#collapse@(Ccount)" aria-expanded="true" aria-controls="collapse@(Ccount)">
+                <span class="table-header-color">
+                    @Html.DisplayFor(modelItem => c.Key.Dept) -
+                    @Html.DisplayFor(modelItem => c.Key.Number) -
+                    @Html.DisplayFor(modelItem => c.Key.Semester) -
+                    @Html.DisplayFor(modelItem => c.Key.Year) -
+                    @Html.DisplayFor(modelItem => c.Key.Name)
+                </span>
+                @if (progressMap[c.Key] != 100)
+                {
+                    <span class="badge badge-pill badge-warning">Incomplete</span>
+                }
+                else
+                {
+                    <span class="badge badge-pill badge-success">Completed</span>
+                }
+                <div class="star-ratings-sprite center">
+                    <span style="width: @(OverallRateMap.Where(e => e.Key == c.Key).FirstOrDefault().Value)%"
+                          class="star-ratings-sprite-rating">
+                    </span>
+                </div>
+            </button>
+
+
+            <div id="collapse@(Ccount)" class="collapse hide" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
+                <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.Key.CId" target="_blank"
+                   class=" btn btn-secondary w-100">
+                    Click to see Details of this course
+                </a>
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Learning Outcome</th>
+                            <th scope="col">
+                                Evaluation Metric
+                            </th>
+                            <th scope="col">
+                                Examples
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        </tr>
+                        @foreach (LearningOutcome LOS in c.Key.LOS)
                         {
                             <tr>
                                 <td>@LOS.Name</td>
@@ -138,4 +503,19 @@
         $('#collapse1').addClass('show');
     });
 
+</script>
+<script>
+    function openCity(evt, cityName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(cityName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
 </script>
