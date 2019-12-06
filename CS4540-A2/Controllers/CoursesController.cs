@@ -394,6 +394,25 @@ namespace CS4540_A2.Controllers
             }
             ViewData["ProgressMap"] = progressMap;
 
+            Dictionary<Course, int> OverallRateMap = new Dictionary<Course, int>();
+            foreach (Course c in courses)
+            {
+                var feedbacks = _context.Feedbacks.Where(f => f.cId == c.CId).ToList();
+                double overall = 0;
+                foreach (Feedback f in feedbacks)
+                {
+                    overall += f.CourseOverallRate;
+                }
+
+                double max = feedbacks.Count * 5;
+                if (max == 0)
+                    max = 1;
+
+                OverallRateMap.Add(c, (int)Math.Round((overall / max) * 100));
+            }
+
+            ViewData["EffRateMap"] = OverallRateMap;
+
             return View(courses);
         }
         public async Task<IActionResult> onPostSubmitNoteAsync([FromBody] NoteData request)

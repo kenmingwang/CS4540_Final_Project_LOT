@@ -4,8 +4,6 @@ var address;
 function search_function() {
     var check_input = document.getElementById("search-button").value;
     if (check_input != "") {
-        console.log( "test");
-
         $.ajax({
             url: "/Home/search_class",
             type: 'GET',
@@ -17,6 +15,8 @@ function search_function() {
                 window.location.href = res.add;
             },
             error: function () {
+                console.log("test111");
+
             }
         });
 
@@ -43,21 +43,6 @@ $('#search-button').autoComplete({
                 match.push(c[i]);
         match.sort();
         hint(match);
-    },
-    onSelect: function (e, term, item) {
-        $.ajax({
-        }).done(function (res) {
-            console.log("action take: " + res);
-            window.location.href = address[names.indexOf(term)];
-
-
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log("failed: ");
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(errorThrown);
-            alert("Warning");
-        });
     }
 });
 

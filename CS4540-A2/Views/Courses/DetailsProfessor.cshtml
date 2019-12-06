@@ -9,7 +9,7 @@
     Dictionary<int, int> AssignmentMap = ViewData["AssignmentMap"] as Dictionary<int, int>;
     Dictionary<int, int[]> ExampleMap = ViewData["ExampleMap"] as Dictionary<int, int[]>;
     Dictionary<Course, int> progressMap = ViewData["ProgressMap"] as Dictionary<Course, int>;
-
+    Dictionary<Course, int> OverallRateMap = ViewData["EffRateMap"] as Dictionary<Course, int>;
     var Ccount = 1;
 }
 <script type="text/javascript">
@@ -44,6 +44,11 @@
                 {
                     <span class="badge badge-pill badge-success">Completed</span>
                 }
+                <div class="star-ratings-sprite center">
+                    <span style="width: @(OverallRateMap[c])%"
+                          class="star-ratings-sprite-rating">
+                    </span>
+                </div>
 
             </button>
 

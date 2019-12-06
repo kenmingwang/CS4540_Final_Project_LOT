@@ -8,32 +8,21 @@
     <meta name="description" content="A LO system for CS 4540">
     <meta name="charset" content="UTF-8">
     <meta name="keywords" content="HTML,CSS">
-    <link rel="stylesheet" href="style.css">
+
     <title>Learning Outcome System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CS4540_A2</title>
 
-    <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/style.css" />
-        <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
-        </script>
 
-    </environment>
-    <environment exclude="Development">
-        <link rel="stylesheet" href="~/css/style.css" />
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
-              crossorigin="anonymous"
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
-
-    </environment>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <script src="https://cdn.ckeditor.com/4.13.0/standard/ckeditor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery"
+            crossorigin="anonymous"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=">
+    </script>
+    <link rel="stylesheet" href="~/css/style.css" />
     <link rel="stylesheet" href="~/css/jquery.auto-complete.css" />
 </head>
 <body>
@@ -49,7 +38,7 @@
             </div>
             <div class="nav-right-search">
                 <form class="search-box">
-                    <input id ="search-button"class="search-txt" type="text" placeholder="Type to search" />
+                    <input id="search-button" class="search-txt" type="text" placeholder="Type to search" />
                     <button onclick="search_function()" class="search-btn" href="#">
                         <i class="fas fa-search"></i>
                     </button>
@@ -101,27 +90,14 @@
     </footer>
 
 
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/js/jquery.auto-complete.min.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
-        <script src="https://kit.fontawesome.com/db17860b98.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 
-
-    </environment>
-    <environment exclude="Development">
-
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"
-                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
-                crossorigin="anonymous"
-                integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o">
-        </script>
-        <script src="https://kit.fontawesome.com/db17860b98.js"></script>
-    </environment>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/jquery.auto-complete.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="https://kit.fontawesome.com/db17860b98.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <script src="~/js/site.js"></script>
-    
+
 
     @RenderSection("Scripts", required: false)
 </body>

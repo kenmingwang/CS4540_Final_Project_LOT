@@ -497,14 +497,12 @@
 
 </div>
 
-<script type="text/javascript">
-    $(function () {
-        $('#collapse1').removeClass('hide');
-        $('#collapse1').addClass('show');
-    });
 
-</script>
 <script>
+    $(function () {
+
+        openCity(event, 'accordion3');
+    });
     function openCity(evt, cityName) {
         var i, tabcontent, tablinks;
         tabcontent = document.getElementsByClassName("tabcontent");

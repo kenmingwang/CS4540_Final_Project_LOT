@@ -24,6 +24,7 @@
                             Instructor (Use professor_mary@utah.edu )
                         </th>
                         <th class="text-center">
+                            Student
                         </th>
                     </tr>
                 </thead>
@@ -43,7 +44,7 @@
                         </td>
 
                         <td>
-                            <a asp-controller="Feedbacks" asp-action="Create">Student Feedback Form </a>
+                            <a asp-controller="Feedbacks" asp-action="SurveyLink" asp-route-cid="1">Student Feedback Form </a>
                         </td>
                     </tr>
                     <tr>
@@ -60,6 +61,7 @@
                         </td>
 
                         <td>
+
                         </td>
                     </tr>
                     <tr>
@@ -72,7 +74,8 @@
 
                         </td>
                         <td>
-                            <a asp-controller="CourseFeedbacks" asp-action="Details" asp-route-id="4">Mary's Course Feedback </a>
+                            <a asp-controller="Courses" asp-action="PastCourses" asp-route-number="4540">4540 past courses </a>
+
                         </td>
                         <td>
                         </td>
