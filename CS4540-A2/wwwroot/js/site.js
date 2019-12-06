@@ -1,6 +1,7 @@
 ﻿var names;
 var address;
-
+//This search box function call in JS
+//when people start searching 
 function search_function() {
     var check_input = document.getElementById("search-button").value;
     if (check_input != "") {
@@ -23,7 +24,7 @@ function search_function() {
         console.log("test1");
     }
 }
-
+//Update the name and adddress 
 $.ajax({
     url: "/Home/Update"
 }).done(function (res) {
@@ -31,7 +32,10 @@ $.ajax({
     address = res.address;
 
 });
-
+//resourse:https://tarekraafat.github.io/autoComplete.js/#/
+//auto-complete function
+//when people start searching, there is small algorithm for
+// auto-complete that information that this professor'courses provide in db
 $('#search-button').autoComplete({
     minChars: 1,
     source: function (item, hint) {

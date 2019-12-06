@@ -420,7 +420,8 @@ namespace CS4540_A2.Controllers
         *  Ajax call to this API to submit a note, via the NoteData body       
         */
         public async Task<IActionResult> onPostSubmitNoteAsync([FromBody] NoteData request)
-        {
+        {   
+            //check current year and semester to authorize what can user do
             int currentYear = DateTime.Now.Year;
             int currentMonth = DateTime.Now.Month;
             string currentSemester = "";
@@ -493,6 +494,7 @@ namespace CS4540_A2.Controllers
          */
         public async Task<IActionResult> onPostLOSNoteAsync([FromBody] NoteData request)
         {
+            //check current year and semester to authorize what can user do
             int currentYear = DateTime.Now.Year;
             int currentMonth = DateTime.Now.Month;
             string currentSemester = "";

@@ -44,13 +44,15 @@ namespace CS4540_A2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        /*
+         * According the user email update their information from db
+         * Connect to the search Course
+         */
         public async Task<JsonResult> Update()
         {
             List<Course> course = _context.Courses.ToList();
             var user = await _userManager.FindByIdAsync(_userManager.GetUserId(User));
-            //List<LearningOutcome> lo = _context.LOS.ToList();
-            //List<CourseNote> cn = _context.CourseNotes.ToList();
-            //List<LOSNote> losn = _context.LOSNotes.ToList();
+  
             
             foreach (Course c in course)
             {
@@ -62,26 +64,13 @@ namespace CS4540_A2.Controllers
              
             }
 
-            //foreach (LearningOutcome l in lo)
-            //{
-
-            //    names.Add(l.Course.Number + " " + l.Course.Name);
-            //    address.Add("/LearningOutcomes/Details/" + l.Course.Number);
-            //}
-            //foreach (CourseNote c in cn)
-            //{
-
-            //    names.Add(c.Course.Dept + c.Course.Number + " " + c.Course.Name);
-            //    address.Add("/Courses/PastCourses/" + c.Course.Number);
-            //}
-            //foreach (LOSNote c in losn)
-            //{
-
-            //    names.Add(c.LO.Course.Dept + c.LO.Course.Number + " " + c.LO.Course.Name);
-            //    address.Add("/LearningOutcomes/Details/" + c.LO.Course.Number);
-            //}
+         
             return Json(new { success = true, names });
         }
+      /*
+       * According the information that update provide 
+       * Go the webbsite that when search click
+       */
         public JsonResult search_class(string text) 
         {
             var sp = text.Split(' ');
