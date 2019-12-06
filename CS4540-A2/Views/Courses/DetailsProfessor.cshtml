@@ -8,9 +8,17 @@
     List<Course> Courses = ViewData["Courses"] as List<Course>;
     Dictionary<int, int> AssignmentMap = ViewData["AssignmentMap"] as Dictionary<int, int>;
     Dictionary<int, int[]> ExampleMap = ViewData["ExampleMap"] as Dictionary<int, int[]>;
+    Dictionary<Course, int> progressMap = ViewData["ProgressMap"] as Dictionary<Course, int>;
 
     var Ccount = 1;
 }
+<script type="text/javascript">
+    $(function () {
+        $('#collapse1').removeClass('hide');
+        $('#collapse1').addClass('show');
+    });
+
+</script>
 
 <div>
     <h1 class="display-4">Professor @name[0] @name[1]'s LOS Courses</h1>
@@ -27,11 +35,20 @@
                     @Html.DisplayFor(modelItem => c.Semester) -
                     @Html.DisplayFor(modelItem => c.Year) -
                     @Html.DisplayFor(modelItem => c.Name)
-                </span> <span class="badge badge-pill badge-warning">Incomplete</span>
+                </span>
+                @if (progressMap[c] != 100)
+                {
+                    <span class="badge badge-pill badge-warning">Incomplete</span>
+                }
+                else
+                {
+                    <span class="badge badge-pill badge-success">Completed</span>
+                }
+
             </button>
 
 
-            <div id="collapse@(Ccount)" class="collapse show" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
+            <div id="collapse@(Ccount)" class="collapse hide" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
                 <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.CId" target="_blank"
                    class=" btn btn-secondary w-100">
                     Click to see Details of this course

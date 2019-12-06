@@ -50,7 +50,15 @@ namespace CS4540_A2.Controllers
         // GET: Courses
         public async Task<IActionResult> Index()
         {
-            var Courses = await _context.Courses.OrderBy(course => course.Number).ToListAsync();
+            var Courses = await _context.Courses.OrderBy(course => course.Number).Include("LOS").ToListAsync();
+
+            var CoursesPerSemester = _context.Courses.GroupBy(y => new { y.Year, y.Semester }).OrderByDescending(y => y.Key.Year)
+                .Select(x => new CoursePerSemester()
+                {
+                    Year = x.Key.Year,
+                    semester = x.Key.Semester,
+                    Courses = x.ToList()
+                }).ToList(); 
 
             Dictionary<Course, string> map = new Dictionary<Course, string>();
             foreach (Course c in Courses)
@@ -64,7 +72,42 @@ namespace CS4540_A2.Controllers
                 }
                 map.Add(c, Professor.UserName);
             }
+
+            Dictionary<Course, int> progressMap = new Dictionary<Course, int>();
+
+            foreach(Course c in Courses)
+            {
+                float max = c.LOS.Count * 4;
+                float total = 0;
+               foreach(LearningOutcome l in c.LOS)
+                {
+                    var AssFile = _context.SyllabusFile.Where(e => e.LearningOutcomeLId == l.LId).FirstOrDefault();
+                    var ExFile = _context.ExamplesFile.Where(e => e.LearningOutcomeLId == l.LId).ToList();
+                    if (AssFile != null)
+                        total += 1;
+                    total += ExFile.Count;
+                }
+                progressMap.Add(c, (int)Math.Round((total / max) * 100));
+            }
+
+            Dictionary<CoursePerSemester, bool> progressCompletionMap = new Dictionary<CoursePerSemester, bool>();
+
+            foreach(CoursePerSemester c in CoursesPerSemester)
+            {
+                progressCompletionMap.Add(c, true);
+                foreach (var course in c.Courses)
+                {
+                    if(progressMap[course] != 100)
+                    {
+                        progressCompletionMap[c] = false;
+                    }
+                }
+            }
+
+            ViewData["ProgressMap"] = progressMap;
             ViewData["CoursesMap"] = map;
+            ViewData["CoursesPerSemester"] = CoursesPerSemester;
+            ViewData["CourseCompletionPerSemester"] = progressCompletionMap;
             return View();
             // return View(await _context.Courses.ToListAsync());
         }
@@ -89,7 +132,7 @@ namespace CS4540_A2.Controllers
             return File(requestFile.Content, MediaTypeNames.Application.Octet, WebUtility.HtmlEncode(requestFile.UntrustedName));
         }
 
-        public async Task<IActionResult> OnGetDownloadDbExampleAsync(int? id,string rate)
+        public async Task<IActionResult> OnGetDownloadDbExampleAsync(int? id, string rate)
         {
             if (id == null)
             {
@@ -102,7 +145,7 @@ namespace CS4540_A2.Controllers
             ExamplesFile file = null;
             switch (rate)
             {
-                case "good": file = requestFile.SingleOrDefault(m => m.IsGood == true);break;
+                case "good": file = requestFile.SingleOrDefault(m => m.IsGood == true); break;
                 case "average": file = requestFile.SingleOrDefault(m => m.IsAverage == true); break;
                 case "bad": file = requestFile.SingleOrDefault(m => m.IsBad == true); break;
 
@@ -120,9 +163,9 @@ namespace CS4540_A2.Controllers
         // GET: Courses/Details?cId=1
         public async Task<IActionResult> Details(int cId)
         {
-            var course = await _context.Courses
-                .FirstOrDefaultAsync(m =>
-               m.CId == cId);
+            var course = await _context.Courses.Where(m =>
+               m.CId == cId).Include("LOS")
+                .FirstOrDefaultAsync();
 
             if (course == null)
             {
@@ -158,7 +201,7 @@ namespace CS4540_A2.Controllers
             ViewData["LOSNotes"] = map;
 
             if (courseNote.Count != 0)
-            {                                                                      
+            {
                 var note = courseNote.ElementAt(0);
                 ViewData["Note"] = note.Text;
                 ViewData["NoteTime"] = note.PostDate;
@@ -199,14 +242,14 @@ namespace CS4540_A2.Controllers
             Dictionary<int, int> LOSFileIDMap = new Dictionary<int, int>();
             Dictionary<int, int[]> ExampleIDMap = new Dictionary<int, int[]>();
 
-            foreach(LearningOutcome l in LOS)
+            foreach (LearningOutcome l in LOS)
             {
                 var ass = _context.SyllabusFile.Where(a => a.LearningOutcomeLId == l.LId).FirstOrDefault();
                 var goodEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsGood == true).FirstOrDefault();
                 var averageEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsAverage == true).FirstOrDefault(); ;
                 var badEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsBad == true).FirstOrDefault();
 
-                if(ass != null)
+                if (ass != null)
                 {
                     LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
                 }
@@ -223,6 +266,18 @@ namespace CS4540_A2.Controllers
             }
             ViewData["AssignmentMap"] = LOSFileIDMap;
             ViewData["ExampleMap"] = ExampleIDMap;
+
+            float max = LOS.Count * 4;
+            float total = 0;
+            foreach (LearningOutcome l in LOS)
+            {
+                var AssFile = _context.SyllabusFile.Where(e => e.LearningOutcomeLId == l.LId).FirstOrDefault();
+                var ExFile = _context.ExamplesFile.Where(e => e.LearningOutcomeLId == l.LId).ToList();
+                if (AssFile != null)
+                    total += 1;
+                total += ExFile.Count;
+            }
+            ViewData["Completion"] = (int)Math.Round((total / max) * 100);
 
             return View(course);
         }
@@ -258,7 +313,7 @@ namespace CS4540_A2.Controllers
             // Get courses links to the email
             var courses = await _context.Courses
                 .Where(m =>
-               m.Email == professorEmail).OrderBy(course => course.Number).ToListAsync();
+               m.Email == professorEmail).OrderByDescending(course => course.Year).ToListAsync();
 
             if (courses == null)
             {
@@ -270,7 +325,7 @@ namespace CS4540_A2.Controllers
             {
                 var LOS = await _context.LOS.Where(LO => LO.CourseCId == c.CId).ToListAsync();
                 c.LOS = LOS;
-                foreach(LearningOutcome l in LOS)
+                foreach (LearningOutcome l in LOS)
                 {
                     LOSS.Add(l);
                 }
@@ -306,6 +361,24 @@ namespace CS4540_A2.Controllers
             ViewData["AssignmentMap"] = LOSFileIDMap;
             ViewData["ExampleMap"] = ExampleIDMap;
 
+            Dictionary<Course, int> progressMap = new Dictionary<Course, int>();
+
+            foreach (Course c in courses)
+            {
+                float max = c.LOS.Count * 4;
+                float total = 0;
+                foreach (LearningOutcome l in c.LOS)
+                {
+                    var AssFile = _context.SyllabusFile.Where(e => e.LearningOutcomeLId == l.LId).FirstOrDefault();
+                    var ExFile = _context.ExamplesFile.Where(e => e.LearningOutcomeLId == l.LId).ToList();
+                    if (AssFile != null)
+                        total += 1;
+                    total += ExFile.Count;
+                }
+                progressMap.Add(c, (int)Math.Round((total / max) * 100));
+            }
+            ViewData["ProgressMap"] = progressMap;
+
             return View(courses);
         }
         public async Task<IActionResult> onPostSubmitNoteAsync([FromBody] NoteData request)
@@ -322,7 +395,7 @@ namespace CS4540_A2.Controllers
                 currentSemester = "SP";
             }
             var course = _context.Courses.Where(c => c.CId == request.FId).FirstOrDefault();
-            if (course.Year != 2020 || course.Semester != currentSemester)
+            if (course.Year != currentYear || course.Semester != currentSemester)
             {
                 return StatusCode(403);
             }
@@ -422,7 +495,7 @@ namespace CS4540_A2.Controllers
 
             var content = await FileHelpers.ProcessFormFile(file, _permittedExtensions, _fileSizeLimit);
 
-            if(content.Length == 0)
+            if (content.Length == 0)
             {
                 return StatusCode(405);
             }
@@ -431,7 +504,7 @@ namespace CS4540_A2.Controllers
             var prevFile = _context.SyllabusFile.FirstOrDefault(m => m.LearningOutcomeLId == int.Parse(lid.ToString()));
             if (prevFile != null)
             {
-                _context.Remove(prevFile);  
+                _context.Remove(prevFile);
             }
 
             var f = new AssignmentFile
@@ -470,16 +543,16 @@ namespace CS4540_A2.Controllers
                 Content = content,
                 UntrustedName = file.FileName,
                 Size = file.Length,
-                
+
                 LearningOutcomeLId = Int32.Parse(lid.ToString()),
                 UploadDT = DateTime.UtcNow
             };
 
             switch (rate)
             {
-                case "good": f.IsGood = true;break;
-                case "average": f.IsAverage = true;break;
-                case "poor": f.IsBad = true;break;
+                case "good": f.IsGood = true; break;
+                case "average": f.IsAverage = true; break;
+                case "poor": f.IsBad = true; break;
             }
 
             _context.ExamplesFile.Add(f);
@@ -491,13 +564,13 @@ namespace CS4540_A2.Controllers
         public async Task<IActionResult> PastCourses(int course_name)
         {
             var courses = await _context.Courses
-               // .OrderBy(course => course.Number)
+                // .OrderBy(course => course.Number)
                 .Where(o => o.Number == course_name)
                 .ToListAsync();
 
             // list of emails 
             Dictionary<Course, string[]> map = new Dictionary<Course, string[]>();
-            foreach(Course c in courses)
+            foreach (Course c in courses)
             {
 
                 var Professor = await _userManager.FindByEmailAsync(c.Email);
@@ -508,7 +581,7 @@ namespace CS4540_A2.Controllers
             {
                 var LOS = await _context.LOS.Where(LO => LO.CourseCId == c.CId).ToListAsync();
                 c.LOS = LOS;
-                
+
             }
             //var courseEmail = courses;
             //var professor = await _userManager.FindByEmailAsync(courseEmail);
@@ -524,6 +597,16 @@ namespace CS4540_A2.Controllers
             return View(courses);
         }
     }
+
+    public class CoursePerSemester
+    {
+        public int Year { get; set; }
+        public string semester { get; set; }
+        public List<Course> Courses { get; set; }
+    }
+
+
+
 
     public class NoteData
     {
