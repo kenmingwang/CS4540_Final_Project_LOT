@@ -562,40 +562,76 @@ namespace CS4540_A2.Controllers
             return StatusCode(200);
         }
 
-        [Route("/Courses/PastCourses/{course_name:int}")]
-        public async Task<IActionResult> PastCourses(int course_name)
+        public async Task<IActionResult> PastCourses(int number)
         {
+            // Get courses links to the email
             var courses = await _context.Courses
-                // .OrderBy(course => course.Number)
-                .Where(o => o.Number == course_name)
-                .ToListAsync();
+                .Where(m =>
+               m.Number == number).OrderByDescending(course => course.Year).ToListAsync();
 
-            // list of emails 
-            Dictionary<Course, string[]> map = new Dictionary<Course, string[]>();
-            foreach (Course c in courses)
+            if (courses == null)
             {
-
-                var Professor = await _userManager.FindByEmailAsync(c.Email);
-                map.Add(c, UserNameAndRolesUtil.UserNameToActualName(Professor.UserName));
+                return NotFound();
             }
 
+            List<LearningOutcome> LOSS = new List<LearningOutcome>();
             foreach (Course c in courses)
             {
                 var LOS = await _context.LOS.Where(LO => LO.CourseCId == c.CId).ToListAsync();
                 c.LOS = LOS;
-
+                foreach (LearningOutcome l in LOS)
+                {
+                    LOSS.Add(l);
+                }
             }
-            //var courseEmail = courses;
-            //var professor = await _userManager.FindByEmailAsync(courseEmail);
             ViewData["Courses"] = courses;
-            ViewData["Professor"] = map;
-            var assign = await _context.SyllabusFile.AsNoTracking().ToListAsync();
+
             Dictionary<int, int> LOSFileIDMap = new Dictionary<int, int>();
-            foreach (var ass in assign)
+            Dictionary<int, int[]> ExampleIDMap = new Dictionary<int, int[]>();
+
+            foreach (LearningOutcome l in LOSS)
             {
-                LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
+                var ass = _context.SyllabusFile.Where(a => a.LearningOutcomeLId == l.LId).FirstOrDefault();
+                var goodEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsGood == true).FirstOrDefault();
+                var averageEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsAverage == true).FirstOrDefault(); ;
+                var badEx = _context.ExamplesFile.Where(g => g.LearningOutcomeLId == l.LId).Where(g => g.IsBad == true).FirstOrDefault();
+
+                if (ass != null)
+                {
+                    LOSFileIDMap.Add(ass.LearningOutcomeLId, ass.Id);
+                }
+
+                int[] Exs = new int[3];
+                Exs[0] = goodEx == null ? -1 : goodEx.Id;
+                Exs[1] = averageEx == null ? -1 : averageEx.Id;
+                Exs[2] = badEx == null ? -1 : badEx.Id;
+
+                if (Exs[0] == -1 && Exs[1] == -1 && Exs[2] == -1)
+                    continue;
+
+                ExampleIDMap.Add(l.LId, Exs);
             }
             ViewData["AssignmentMap"] = LOSFileIDMap;
+            ViewData["ExampleMap"] = ExampleIDMap;
+
+            Dictionary<Course, int> progressMap = new Dictionary<Course, int>();
+
+            foreach (Course c in courses)
+            {
+                float max = c.LOS.Count * 4;
+                float total = 0;
+                foreach (LearningOutcome l in c.LOS)
+                {
+                    var AssFile = _context.SyllabusFile.Where(e => e.LearningOutcomeLId == l.LId).FirstOrDefault();
+                    var ExFile = _context.ExamplesFile.Where(e => e.LearningOutcomeLId == l.LId).ToList();
+                    if (AssFile != null)
+                        total += 1;
+                    total += ExFile.Count;
+                }
+                progressMap.Add(c, (int)Math.Round((total / max) * 100));
+            }
+            ViewData["ProgressMap"] = progressMap;
+
             return View(courses);
         }
     }

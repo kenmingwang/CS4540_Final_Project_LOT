@@ -83,7 +83,9 @@ $(function () {
             <div class="card-body">
                 <h3 class="card-title text-center">
                     @Html.DisplayFor(model => model.Name)
-
+                    <a class="btn btn-outline-dark btn-xs"
+                            asp-controller="Courses" asp-action="PastCourses"
+                            asp-route-number="@(course.Number)" target="_blank"> Past Courses</a>
                 </h3>
                 <h5 class="card-title text-center">
                     Professor: @name[0] @name[1]
