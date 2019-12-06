@@ -8,8 +8,15 @@
     List<Course> Courses = ViewData["Courses"] as List<Course>;
     Dictionary<int, int> AssignmentMap = ViewData["AssignmentMap"] as Dictionary<int, int>;
     Dictionary<Course, string[]> professorName = ViewData["Professor"] as Dictionary<Course, string[]>;
+    Dictionary<int, int[]> ExampleMap = ViewData["ExampleMap"] as Dictionary<int, int[]>;
+    Dictionary<Course, int> progressMap = ViewData["ProgressMap"] as Dictionary<Course, int>;
+
     var Ccount = 1;
 }
+
+    <div>
+        <h1 class="display-4">Past courses for CS @Courses[0].Number</h1>
+    </div>
 
 <div id="accordion">
     @foreach (Course c in Courses)
@@ -21,20 +28,26 @@
                     @Html.DisplayFor(modelItem => c.Number) -
                     @Html.DisplayFor(modelItem => c.Semester) -
                     @Html.DisplayFor(modelItem => c.Year) -
-                    @Html.DisplayFor(modelItem => c.Name) -
-                    @Html.DisplayFor(modelItem => (professorName[c][0]))
-                    @Html.DisplayFor(modelItem => (professorName[c][1]))
+                    @Html.DisplayFor(modelItem => c.Name)
+                </span>
+                @if (progressMap[c] != 100)
+                {
+                    <span class="badge badge-pill badge-warning">Incomplete</span>
+                }
+                else
+                {
+                    <span class="badge badge-pill badge-success">Completed</span>
+                }
 
-                </span> <span class="badge badge-pill badge-warning">Incomplete</span>
             </button>
 
 
-            <div id="collapse@(Ccount)" class="collapse show" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
+            <div id="collapse@(Ccount)" class="collapse hide" aria-labelledby="heading@(Ccount)" data-parent="#accordion">
+                <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.CId" target="_blank"
+                   class=" btn btn-secondary w-100">
+                    Click to see Details of this course
+                </a>
                 <table class="table table-hover table-striped">
-                    <a asp-controller="Courses" asp-action="Details" asp-route-cid="@c.CId" target="_blank"
-                       class=" btn btn-secondary w-100">
-                        Click to see Details of this course
-                    </a>
                     <thead>
                         <tr>
                             <th scope="col">Learning Outcome</th>
@@ -66,9 +79,45 @@
                                     }
                                 </td>
                                 <td>
-                                    <a class="btn btn-info btn-xs " href="~/files/Dummy.html">Good</a>
-                                    <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Average</a>
-                                    <a class="btn btn-info btn-xs" href="~/files/Dummy.html">Poor</a>
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][0] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                           target="_blank">Good</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Exgood_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="good"
+                                           target="_blank">Good</a>
+                                    }
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][1] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                           target="_blank">Average</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Exaverage_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="average"
+                                           target="_blank">Average</a>
+                                    }
+                                    @if (ExampleMap.ContainsKey(LOS.LId) && ExampleMap[LOS.LId][2] != -1)
+                                    {
+                                        <a class="btn btn-info btn-xs " asp-controller="Courses" asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                           target="_blank">Poor</a>
+                                    }
+                                    else
+                                    {
+                                        <a id="Expoor_@(LOS.LId)" class="btn btn-info btn-xs disabled" asp-controller="Courses"
+                                           asp-action="OnGetDownloadDbExampleAsync"
+                                           asp-route-id="@(LOS.LId)" asp-route-rate="bad"
+                                           target="_blank">Poor</a>
+                                    }
                                 </td>
                             </tr>
                         }
@@ -82,3 +131,11 @@
 
 
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#collapse1').removeClass('hide');
+        $('#collapse1').addClass('show');
+    });
+
+</script>
