@@ -32,7 +32,7 @@ namespace CS4540_A2.Controllers
                 f.CourseEffectiveRate = (f.CourseEffectiveRate / 5) * 100;
                 f.CourseObjMetRate = (f.CourseObjMetRate / 5) * 100;
                 f.CourseOrganizedRate = (f.CourseOrganizedRate / 5) * 100;
-                f.CourseOverallRate = (f.CourseOrganizedRate / 5) * 100;
+                f.CourseOverallRate = (f.CourseOverallRate / 5) * 100;
             }
 
             return View(feedbacks);
@@ -60,7 +60,7 @@ namespace CS4540_A2.Controllers
                 feedback.CourseEffectiveRate = (feedback.CourseEffectiveRate / 5) * 100;
                 feedback.CourseObjMetRate = (feedback.CourseObjMetRate / 5) * 100;
                 feedback.CourseOrganizedRate = (feedback.CourseOrganizedRate / 5) * 100;
-                feedback.CourseOverallRate = (feedback.CourseOrganizedRate / 5) * 100;
+                feedback.CourseOverallRate = (feedback.CourseOverallRate / 5) * 100;
             }
 
             return View(feedback);
