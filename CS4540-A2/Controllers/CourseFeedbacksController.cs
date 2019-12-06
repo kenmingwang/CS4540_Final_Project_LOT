@@ -74,10 +74,10 @@ namespace CS4540_A2.Controllers
                     courseFeedback.AvgCourseOverallRate += courseFeedback.CourseOverallRate[i].CourseOverallRate;
                 }
                 // average of all rating
-                courseFeedback.AvgCourseEffectiveRate = (courseFeedback.AvgCourseEffectiveRate / (5 * courseFeedback.CourseEffectiveRate.Count)) * 100;
-                courseFeedback.AvgCourseObjMetRate = (courseFeedback.AvgCourseObjMetRate / (5 * courseFeedback.CourseObjMetRate.Count)) * 100;
-                courseFeedback.AvgCourseOrganizedRate = (courseFeedback.AvgCourseOrganizedRate / (5 * courseFeedback.CourseOrganizedRate.Count)) * 100;
-                courseFeedback.AvgCourseOverallRate = (courseFeedback.AvgCourseOverallRate / (5 * courseFeedback.CourseOverallRate.Count)) * 100;
+                courseFeedback.AvgCourseEffectiveRate = getPercentage(courseFeedback.AvgCourseEffectiveRate, courseFeedback.CourseEffectiveRate.Count);
+                courseFeedback.AvgCourseObjMetRate = getPercentage(courseFeedback.AvgCourseObjMetRate, courseFeedback.CourseObjMetRate.Count);
+                courseFeedback.AvgCourseOrganizedRate = getPercentage(courseFeedback.AvgCourseOrganizedRate, courseFeedback.CourseOrganizedRate.Count);
+                courseFeedback.AvgCourseOverallRate = getPercentage(courseFeedback.AvgCourseOverallRate, courseFeedback.CourseOverallRate.Count);
             }
 
             return View(courseFeedback);
@@ -200,6 +200,11 @@ namespace CS4540_A2.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        /* Helper method to get rating percentage*/
+        private double getPercentage(double rate, int count)
+        {
+            return (rate / (5*count)) * 100;
+        }
         private bool CourseFeedbackExists(int id)
         {
             return _context.CourseFeedbacks.Any(e => e.fId == id);

@@ -29,10 +29,10 @@ namespace CS4540_A2.Controllers
             foreach (var f in feedbacks)
             {  
                 // percentage
-                f.CourseEffectiveRate = (f.CourseEffectiveRate / 5) * 100;
-                f.CourseObjMetRate = (f.CourseObjMetRate / 5) * 100;
-                f.CourseOrganizedRate = (f.CourseOrganizedRate / 5) * 100;
-                f.CourseOverallRate = (f.CourseOverallRate / 5) * 100;
+                f.CourseEffectiveRate = getPercentage(f.CourseEffectiveRate);
+                f.CourseObjMetRate = getPercentage(f.CourseObjMetRate);
+                f.CourseOrganizedRate = getPercentage(f.CourseOrganizedRate);
+                f.CourseOverallRate = getPercentage(f.CourseOverallRate);
             }
 
             return View(feedbacks);
@@ -57,10 +57,10 @@ namespace CS4540_A2.Controllers
             else
             {
                 // percentage
-                feedback.CourseEffectiveRate = (feedback.CourseEffectiveRate / 5) * 100;
-                feedback.CourseObjMetRate = (feedback.CourseObjMetRate / 5) * 100;
-                feedback.CourseOrganizedRate = (feedback.CourseOrganizedRate / 5) * 100;
-                feedback.CourseOverallRate = (feedback.CourseOverallRate / 5) * 100;
+                feedback.CourseEffectiveRate = getPercentage(feedback.CourseEffectiveRate);
+                feedback.CourseObjMetRate = getPercentage(feedback.CourseObjMetRate);
+                feedback.CourseOrganizedRate = getPercentage(feedback.CourseOrganizedRate);
+                feedback.CourseOverallRate = getPercentage(feedback.CourseOverallRate);
             }
 
             return View(feedback);
@@ -213,6 +213,12 @@ namespace CS4540_A2.Controllers
                 return StatusCode(405);
             }
             return StatusCode(200);
+        }
+
+        /* Helper method to get rating percentage*/
+        private double getPercentage(double rate)
+        {
+            return (rate / 5) * 100;
         }
 
         public class FeedBackData
